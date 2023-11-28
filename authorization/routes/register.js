@@ -12,12 +12,11 @@ router.get('/', (req, res) => {  // send back a simple form for the registration
 })
 
 router.post('/', async (req, res) => {
-  const email = req.body.email
   const username = req.body.username
   const password = req.body.password
 
-  if (!email || !password || !username) 
-    return res.redirect(`/register?success=false&email=${email}&username=${username}${!password ? `&password=` : ''}`)
+  if (!username || !password) 
+    return res.redirect(`/register?success=false&username=${username}${!password ? `&password=` : ''}`)
 
   let user;
 
@@ -25,7 +24,6 @@ router.post('/', async (req, res) => {
   try {
     user = await prisma.user.create({
       data: {
-        email: email,
         username: username,
         password: password
       }
@@ -33,7 +31,7 @@ router.post('/', async (req, res) => {
   }
   catch (e) {
     // handle error of not unique
-    if (e.code === 'P2002') return res.redirect(`/register?success=false&email=${email}&username=${username}&unique=false`)
+    if (e.code === 'P2002') return res.redirect(`/register?success=false&username=${username}&unique=false`)
     else return res.redirect(`/register?success=false`)
   }
 

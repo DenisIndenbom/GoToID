@@ -12,21 +12,21 @@ router.get('/', (req, res) => {  // send back a simple form for the oauth
 })
 
 router.post('/', async (req, res) => {
-    const email = req.body.email
+    const username = req.body.username
     const password = req.body.password
 
-    if (!email || !password) return res.redirect(`/login?success=false`)
+    if (!username || !password) return res.redirect(`/login?success=false`)
 
     const user = await prisma.user.findFirst({
         where: {
-            email
+            username: username
         }
     })
 
     const correct_password = user.password === password
 
     if (!user || !correct_password) 
-        return res.redirect(`/login?success=false&email=${email}${!correct_password ? '&password=': ''}`)
+        return res.redirect(`/login?success=false&username=${username}${!correct_password ? '&password=': ''}`)
 
     req.session.user_id = user.id
 

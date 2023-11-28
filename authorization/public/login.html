@@ -21,13 +21,16 @@
                 </div>
                 <form method="post" class="needs-validation" novalidate>
                     <div class="mb-4">
-                        <label>Email</label>
-                        <input class="form-control" type="email" name="email" required />
-                        <div class="invalid-feedback">
-                            Please enter your email address.
-                        </div>
-                        <div class="valid-feedback">
-                            Looks good!
+                        <label>Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text">@</span>
+                            <input type="text" name="username" class="form-control" required pattern="^[a-z0-9_]{3,15}$">
+                            <div class="invalid-feedback">
+                                Please enter your username.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
                         </div>
                     </div>
                     <div class="mb-4">

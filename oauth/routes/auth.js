@@ -13,7 +13,8 @@ router.get('/', (req, res) => {  // send back a simple form for the oauth
 })
 
 router.post('/authorize', async (req, res, next) => {
-  const { email, password } = req.body;
+  const username = req.body.username
+  const password = req.body.password
 
   const params = [ // Send params back down
     'client_id',
@@ -25,13 +26,13 @@ router.post('/authorize', async (req, res, next) => {
     .map(a => `${a}=${req.body[a]}`)
     .join('&')
   
-  if (!email || !password) {
+  if (!username || !password) {
     return res.redirect(`/oauth?success=false&${params}`)
   }
 
   const user = await prisma.user.findFirst({
     where: {
-      email: email
+      username: username
     }
   })
 

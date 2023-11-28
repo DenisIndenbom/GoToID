@@ -17,7 +17,7 @@ router.get('/userinfo', async (req, res) => {
     }
   })).user
 
-  res.json({ user_id: user.id, email: user.email, username: user.username, createdAt: user.createdAt})
+  res.json({ user_id: user.id, username: user.username, createdAt: user.createdAt})
 })
 
 module.exports = router

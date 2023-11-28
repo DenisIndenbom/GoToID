@@ -19,28 +19,21 @@
                 <h2 class="fw-bold mb-2 text-uppercase">Register On GoToID</h2>
                 <p class="text-white-50 mb-5">Please fill in the fields.</p>
               </div>
-              <div class="email-warning" style="visibility: hidden; display: none;">
-                <div class="alert alert-warning" role="alert">The mail is already registered!</div>
+              <div class="username-warning" style="visibility: hidden; display: none;">
+                <div class="alert alert-warning" role="alert">The username is already registered!</div>
               </div>
               <form method="post" class="needs-validation" novalidate>
                 <div class="mb-4">
-                  <label>Email</label>
-                  <input class="form-control" type="email" name="email" required />
-                  <div class="invalid-feedback">
-                    Please enter your email address.
-                  </div>
-                  <div class="valid-feedback">
-                    Looks good!
-                  </div>
-                </div>
-                <div class="mb-4">
-                  <label>Name</label>
-                  <input class="form-control" type="text" name="username" required />
-                  <div class="invalid-feedback">
-                    Please enter your full name.
-                  </div>
-                  <div class="valid-feedback">
-                    Looks good!
+                  <label>Username</label>
+                  <div class="input-group">
+                    <span class="input-group-text">@</span>
+                    <input type="text" name="username" class="form-control" required pattern="^[a-z0-9_]{3,15}$">
+                    <div class="invalid-feedback">
+                      Please enter your username.
+                    </div>
+                    <div class="valid-feedback">
+                      Looks good!
+                    </div>
                   </div>
                 </div>
                 <div class="mb-4">
@@ -52,7 +45,7 @@
                 </div>
                 <p class="mb-3 pb-lg-2"></p>
                 <div class="text-center">
-                  <button class="btn btn-outline-light btn-lg px-5 center" type="submit">Login</button>
+                  <button class="btn btn-outline-light btn-lg px-5 center" type="submit">Register</button>
                 </div>
               </form>
             </div>
@@ -78,7 +71,7 @@
       }
 
       if (urlParams.get('unique') === 'false')
-        document.body.querySelector(`.email-warning`).style.cssText = 'visibility: visible; display: block;';
+        document.body.querySelector(`.username-warning`).style.cssText = 'visibility: visible; display: block;';
     }
   </script>
 
