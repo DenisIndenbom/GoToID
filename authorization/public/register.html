@@ -22,6 +22,9 @@
               <div class="username-warning" style="visibility: hidden; display: none;">
                 <div class="alert alert-warning" role="alert">The username is already registered!</div>
               </div>
+              <div class="code-warning" style="visibility: hidden; display: none;">
+                <div class="alert alert-warning" role="alert">The invite code is wrong!</div>
+              </div>
               <form method="post" class="needs-validation" novalidate>
                 <div class="mb-4">
                   <label>Username</label>
@@ -38,9 +41,19 @@
                 </div>
                 <div class="mb-4">
                   <label>Password</label>
-                  <input class="form-control" type="password" name="password" required />
+                  <input class="form-control" type="password" name="password" required/>
                   <div class="invalid-feedback">
                     Please enter your password.
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <label>Invite code</label>
+                  <input class="form-control" type="text" name="invite_code" required pattern="^[a-z0-9_]{3,15}$"/>
+                  <div class="invalid-feedback">
+                    Please enter your invite code.
+                  </div>
+                  <div class="valid-feedback">
+                    Looks good!
                   </div>
                 </div>
                 <p class="mb-3 pb-lg-2"></p>
@@ -59,7 +72,7 @@
       </div>
     </div>
   </div>
-  <script src="/static/error_handler.js"></script>
-  <script src="/static/validate_form.js"></script>    </body>
-
+  <script src="/static/js/error_handler.js"></script>
+  <script src="/static/js/validate_form.js"></script>
+</body>
 </html>

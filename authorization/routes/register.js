@@ -14,13 +14,25 @@ router.get('/', (req, res) => {  // send back a simple form for the registration
 router.post('/', async (req, res) => {
   const username = req.body.username
   const password = req.body.password
+  const inviteCode = req.body.invite_code
 
-  if (!username || !password) 
-    return res.redirect(`/register?success=false&username=${username}${!password ? `&password=` : ''}`)
+  if (!username || !password || !inviteCode) 
+    return res.redirect(`/register?success=false&username=${username}&invite_code=${inviteCode}${!password ? `&password=` : ''}`)
 
-  let user;
+  const invite = await prisma.inviteCode.findFirst({
+    where: {
+      code: inviteCode,
+      expiresAt: {
+        gte: new Date()
+      }
+    }
+  })
+
+  if (!invite)
+    return res.redirect(`/register?success=false&username=${username}&invite_code=${inviteCode}&wrong_code=true`)
 
   // create new user in db
+  let user;
   try {
     user = await prisma.user.create({
       data: {

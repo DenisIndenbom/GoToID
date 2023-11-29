@@ -19,7 +19,7 @@
               <div class="mb-md-3 mt-md-3 pb-5">
                 <div class="text-center">
                   <h2 class="fw-bold mb-2 text-uppercase">OAuth GoToID</h2>
-                  <p class="text-white-50 mb-3">Please enter your email and password!</p>
+                  <p class="text-white-50 mb-3">Please enter your username and password!</p>
                 </div>
                 <!-- <div class="alert alert-warning">
                   <div>
@@ -78,9 +78,8 @@
         </div>
       </div>
     </div>
-    <script src="/static/error_handler.js"></script>
-    <script src="/static/validate_form.js"></script>
-<script>
+    <script src="/static/js/validate_form.js"></script>
+    <script>
       (function () {
         const urlParams = new URLSearchParams(decodeURIComponent(window.location.search));
         [
@@ -92,7 +91,7 @@
         ].forEach((type) => {
           const input = document.body.querySelector(`input[name=${type}]`);
           const value = urlParams.get(type);
-          input.value = value;
+          input.value = value;})
         });
     </script>
   </body>

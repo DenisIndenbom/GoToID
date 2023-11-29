@@ -9,6 +9,10 @@
             else input.value = value;
 
 			if (urlParams.get('unique') === 'false')
-				document.body.querySelector('.username-warning').style.cssText = 'visibility: visible; display: block;';        }
+				document.body.querySelector('.username-warning').style.cssText = 'visibility: visible; display: block;';
+
+            if (urlParams.get('wrong_code') === 'true')
+                document.body.querySelector('.code-warning').style.cssText = 'visibility: visible; display: block;';
+        }
 	}
 })()

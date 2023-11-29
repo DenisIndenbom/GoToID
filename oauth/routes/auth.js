@@ -77,7 +77,10 @@ router.post('/token', async (req, res, next) => {
       {
         where: {
           authorizationCode: code,
-          clientId: clientId
+          clientId: clientId,
+          expiresAt: {
+            gte: new Date()
+          }
         }
       }
     )

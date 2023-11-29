@@ -17,6 +17,11 @@ model User {
   Token           Token[]
 }
 
+model InviteCode {
+  code      String   @unique
+  expiresAt DateTime
+}
+
 model AuthCode {
   authorizationCode String   @unique
   expiresAt         DateTime
