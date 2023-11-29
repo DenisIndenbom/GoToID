@@ -36,6 +36,9 @@ app.use(session({
 
 app.use(cors({ origin: true }))
 
+// add static folder
+app.use('/static', express.static(__dirname + '/static'));
+
 // add cors to all routes
 app.use('/oauth', authRoutes.auth) 
 app.use('/api', oauthServer.authenticate(), authRoutes.api) 
