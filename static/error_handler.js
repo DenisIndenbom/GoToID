@@ -1,0 +1,12 @@
+(() => {
+    const urlParams = new URLSearchParams(decodeURIComponent(window.location.search));
+    const error = urlParams.get("success") === "false";
+    if (error) {
+        for (const [key, value] of urlParams) {
+            const input = document.body.querySelector(`input[name=${key}]`);
+            if (!input) continue;
+            if (!value) input.classList.add("is-invalid");
+            else input.value = value;
+        }
+    }
+})()
