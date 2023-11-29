@@ -7,6 +7,8 @@
             if (!input) continue;
             if (!value) input.classList.add("is-invalid");
             else input.value = value;
-        }
-    }
+
+			if (urlParams.get('unique') === 'false')
+				document.body.querySelector('.username-warning').style.cssText = 'visibility: visible; display: block;';        }
+	}
 })()
