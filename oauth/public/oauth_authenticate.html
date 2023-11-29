@@ -78,7 +78,9 @@
         </div>
       </div>
     </div>
-    <script>
+    <script src="/static/error_handler.js"></script>
+    <script src="/static/validate_form.js"></script>
+<script>
       (function () {
         const urlParams = new URLSearchParams(decodeURIComponent(window.location.search));
         [
@@ -92,33 +94,6 @@
           const value = urlParams.get(type);
           input.value = value;
         });
-
-        const error = urlParams.get("success") === "false";
-        if (error) {
-          document.body
-            .querySelectorAll(".auth")
-            .forEach((el) => el.classList.add("is-invalid"));
-        }
-      })();
-    </script>
-    <script>
-      (() => {
-        'use strict'
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        const forms = document.querySelectorAll('.needs-validation')
-
-        // Loop over them and prevent submission
-        Array.from(forms).forEach(form => {
-          form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-              event.preventDefault()
-              event.stopPropagation()
-            }
-
-            form.classList.add('was-validated')
-          }, false)
-        })
-      })()
     </script>
   </body>
 </html>
