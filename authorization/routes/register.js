@@ -1,14 +1,14 @@
-const path = require('path') // has path and __dirname
 const express = require('express')
 
 const prisma = require('../../lib/prisma')
 
 const router = express.Router() // Instantiate a new router
 
-const filePath = path.join(__dirname, '../public/register.html')
-
-router.get('/', (req, res) => {  // send back a simple form for the registration
-  res.sendFile(filePath)
+router.get('/', (req, res) => {  // send back a simple form for the auth
+  res.render('authorization/register.html', {
+    base: 'base.html',
+    title: 'Register',
+  })
 })
 
 router.post('/', async (req, res) => {
@@ -48,7 +48,8 @@ router.post('/', async (req, res) => {
   }
 
   // login user
-  req.session.user_id = user.id;
+  req.session.user_id = user.id
+  req.session.username = user.username
 
   return res.redirect('/')
 })

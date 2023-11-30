@@ -1,4 +1,3 @@
-const path = require('path') // has path and __dirname
 const express = require('express')
 const oauthServer = require('../oauth/server.js')
 
@@ -6,10 +5,12 @@ const prisma = require('../../lib/prisma')
 
 const router = express.Router() // Instantiate a new router
 
-const filePath = path.join(__dirname, '../public/oauth_authenticate.html')
-
 router.get('/', (req, res) => {  // send back a simple form for the oauth
-  res.sendFile(filePath)
+  res.render('oauth/oauth_authenticate.html', {
+    base: 'base.html',
+    title: 'OAuth',
+    username: (req.session && req.session.username) ? req.session.username : ''
+  })
 })
 
 router.post('/authorize', async (req, res, next) => {
@@ -25,7 +26,7 @@ router.post('/authorize', async (req, res, next) => {
   ]
     .map(a => `${a}=${req.body[a]}`)
     .join('&')
-  
+
   if (!username || !password) {
     return res.redirect(`/oauth?success=false&${params}`)
   }
@@ -36,7 +37,7 @@ router.post('/authorize', async (req, res, next) => {
     }
   })
 
-  const correct_password = user.password === password
+  const correct_password = user ? user.password === password : false
 
   if (user && correct_password) {
     req.body.user = { user: user.id }

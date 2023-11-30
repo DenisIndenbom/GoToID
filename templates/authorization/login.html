@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8" />
-    <title>Login On GoToID</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
-</head>
-
-<body style="background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))">
+{% extends base %}
+{% block content %}
     <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -39,6 +30,9 @@
                         <div class="invalid-feedback">
                             Please enter your password.
                         </div>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
                     </div>
                     <p class="mb-3 pb-lg-2"></p>
                     <div class="text-center">
@@ -58,6 +52,4 @@
     </div>
     <script src="/static/js/error_handler.js"></script>
     <script src="/static/js/validate_form.js"></script>    
-</body>
-
-</html>
+{% endblock %}

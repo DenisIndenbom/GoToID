@@ -1,14 +1,14 @@
-const path = require('path') // has path and __dirname
 const express = require('express')
 
 const prisma = require('../../lib/prisma')
 
 const router = express.Router() // Instantiate a new router
 
-const filePath = path.join(__dirname, '../public/login.html')
-
-router.get('/', (req, res) => {  // send back a simple form for the oauth
-    res.sendFile(filePath)
+router.get('/', (req, res) => {  // send back a simple form for the auth
+    res.render('authorization/login.html', {
+        base: 'base.html',
+        title: 'Login',
+    })
 })
 
 router.post('/', async (req, res) => {
@@ -23,12 +23,14 @@ router.post('/', async (req, res) => {
         }
     })
 
-    const correct_password = user.password === password
+    const correct_password = user ? user.password === password : false
 
     if (!user || !correct_password) 
         return res.redirect(`/login?success=false&username=${username}${!correct_password ? '&password=': ''}`)
 
+    // login user
     req.session.user_id = user.id
+    req.session.username = user.username
 
     return res.redirect('/')
 })

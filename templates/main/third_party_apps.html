@@ -1,0 +1,18 @@
+{% extends base %}
+{% block content %}
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-3" style="border-radius: 1rem;">
+          {% for app in apps %}
+          <div class="card bg-dark text-white my-1" style="border-radius: 1rem;">
+            <div class="card-body clear-fix">
+              <div class="float-start">{{ app.clientId }}</div>
+              <div class="float-end">
+                <button class="btn btn-outline-danger">revoke</button>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+    </div>
+{% endblock %}
