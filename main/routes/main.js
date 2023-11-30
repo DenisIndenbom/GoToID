@@ -30,4 +30,17 @@ router.get('/third_party_apps', async function (req, res, next) {
     })
 })
 
+router.get('/third_party_apps/revoke/:clientId', async function (req, res, next) {
+    const clientId = req.params.clientId
+
+    const clients = await prisma.token.deleteMany({
+        where: {
+            userId: req.session.user_id,
+            clientId: clientId
+        }
+    })
+
+    return res.redirect('/main/third_party_apps')
+})
+
 module.exports = router
