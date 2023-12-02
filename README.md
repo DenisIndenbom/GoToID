@@ -12,7 +12,7 @@ GoToID is an authorization server designed specifically for the GoToCamp communi
 Authorization: Bearer <token>
 ```
 
-### **API access**
+### **API Access**
 ```js
 GET /api/
 ```
