@@ -2,6 +2,7 @@ const express = require('express')
 const oauthServer = require('../oauth/server.js')
 
 const prisma = require('../../lib/prisma')
+const comparePassword = require('../../methods').passwordHashing.comparePassword
 
 const router = express.Router() // Instantiate a new router
 
@@ -37,7 +38,7 @@ router.post('/authorize', async (req, res, next) => {
     }
   })
 
-  const correct_password = user ? user.password === password : false
+  const correct_password = user ? await comparePassword(password, user.password) : false
 
   if (user && correct_password) {
     req.body.user = { user: user.id }

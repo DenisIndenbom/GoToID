@@ -13,5 +13,8 @@
 
         if (urlParams.get('wrong_code') === 'true')
             document.body.querySelector('.code-warning').style.cssText = 'visibility: visible; display: block;';
+
+        if (!urlParams.get('password'))
+            document.body.querySelector('.password-warning').style.cssText = 'visibility: visible; display: block;';
 	}
 })()

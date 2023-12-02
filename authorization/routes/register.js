@@ -1,6 +1,7 @@
 const express = require('express')
 
 const prisma = require('../../lib/prisma')
+const hashPassword = require('../../methods').passwordHashing.hashPassword
 
 const router = express.Router() // Instantiate a new router
 
@@ -17,7 +18,7 @@ router.post('/', async (req, res) => {
   const inviteCode = req.body.invite_code
 
   if (!username || !password || !inviteCode) 
-    return res.redirect(`/register?success=false&username=${username}&invite_code=${inviteCode}${!password ? `&password=` : ''}`)
+    return res.redirect(`/register?success=false&username=${username}&invite_code=${inviteCode}`)
 
   const invite = await prisma.inviteCode.findFirst({
     where: {
@@ -37,7 +38,7 @@ router.post('/', async (req, res) => {
     user = await prisma.user.create({
       data: {
         username: username,
-        password: password
+        password: await hashPassword(password)
       }
     })
   }

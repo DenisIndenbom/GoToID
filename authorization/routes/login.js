@@ -1,6 +1,7 @@
 const express = require('express')
 
 const prisma = require('../../lib/prisma')
+const comparePassword = require('../../methods').passwordHashing.comparePassword
 
 const router = express.Router() // Instantiate a new router
 
@@ -23,7 +24,7 @@ router.post('/', async (req, res) => {
         }
     })
 
-    const correct_password = user ? user.password === password : false
+    const correct_password = user ? await comparePassword(password, user.password) : false
 
     if (!user || !correct_password) 
         return res.redirect(`/login?success=false&username=${username}${!correct_password ? '&password=': ''}`)
