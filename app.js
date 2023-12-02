@@ -23,7 +23,6 @@ const mainRoutes = main.routes
 const config = require('dotenv').config({ path: __dirname + '/.env' }).parsed
 
 const port = config.PORT || 3030;
-const secret = config.SECRET
 const debug = config.DEBUG === "true"
 
 // Init template engine
@@ -39,9 +38,10 @@ app.use(bodyParser.json())
 
 // Setting up sessions
 app.use(session({
-    secret: secret,
+    secret: require('crypto').randomBytes(64).toString('hex'),
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: { maxAge: 3 * 24 * 60 * 60 * 1000 } // session is stored for 3 days
 }))
 
 app.use(cors({ origin: true }))
