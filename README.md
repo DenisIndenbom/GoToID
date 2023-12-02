@@ -19,7 +19,7 @@ GET /api/
 **Returned parameters**
 ```json
 {
-    success: true
+    "success": true
 }
 ```
 ### **User Info**
@@ -29,9 +29,9 @@ GET /api/userinfo
 **Returned parameters**
 ```json
 {
-    user_id: 1,
-    username: "name", 
-    createdAt: "2023-12-02 00:00:00"
+    "user_id": 1,
+    "username": "name", 
+    "createdAt": "2023-12-02 00:00:00"
 }
 ```
 
