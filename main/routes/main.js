@@ -2,9 +2,13 @@ const path = require('path') // has path and __dirname
 const express = require('express')
 
 const prisma = require('../../lib/prisma')
+const randToken = require('rand-token').generator({
+    source: require('crypto').randomBytes
+});
 
 const router = express.Router() // Instantiate a new router
 
+// Main page
 router.get('/', async function (req, res, next) {
     res.render('main/main.html', {
         base: 'base.html',
@@ -13,6 +17,7 @@ router.get('/', async function (req, res, next) {
     })
 })
 
+// Third party apps pages
 router.get('/third_party_apps', async function (req, res, next) {
     const clients = await prisma.token.findMany({
         where: {
@@ -22,7 +27,7 @@ router.get('/third_party_apps', async function (req, res, next) {
             clientId: true,
         }
     })
-    
+
     res.render('main/third_party_apps.html', {
         base: 'base.html',
         title: 'Third-party apps',
@@ -30,10 +35,15 @@ router.get('/third_party_apps', async function (req, res, next) {
     })
 })
 
+// Revoke access
 router.get('/third_party_apps/revoke/:clientId', async function (req, res, next) {
     const clientId = req.params.clientId
 
-    const clients = await prisma.token.deleteMany({
+    // Validate data
+    if (!clientId) return res.redirect(`/main/third_party_apps`)
+
+    // Delete tokens
+    await prisma.token.deleteMany({
         where: {
             userId: req.session.user_id,
             clientId: clientId
@@ -41,6 +51,157 @@ router.get('/third_party_apps/revoke/:clientId', async function (req, res, next)
     })
 
     return res.redirect('/main/third_party_apps')
+})
+
+// Own apps page
+router.get('/own_apps', async function (req, res, next) {
+    const clients = await prisma.client.findMany({
+        where: {
+            userId: req.session.user_id
+        },
+        select: {
+            clientId: true,
+            clientSecret: true,
+            redirectUris: true,
+        }
+    })
+
+    res.render('main/own_apps.html', {
+        base: 'base.html',
+        title: 'Create App',
+        apps: clients ? clients : []
+    })
+})
+
+// Create app
+router.get('/own_apps/create', async function (req, res, next) {
+    res.render('main/app.html', {
+        base: 'base.html',
+        title: 'Create App',
+        edit: false
+    })
+})
+
+router.post('/own_apps/create', async function (req, res, next) {
+    const clientId = req.body.app_id
+    const redirectURI = req.body.redirect_uri
+
+    // Validate data
+    if (!clientId || !redirectURI)
+        return res.redirect(`/main/own_apps/create?success=false&app_id=${clientId}&redirect_uri=${redirectURI}`)
+
+    try {
+        await prisma.client.create({
+            data: {
+                clientId: clientId,
+                clientSecret: randToken.generate(32),
+                redirectUris: [redirectURI],
+                grants: ['authorization_code', 'refresh_token'],
+                userId: req.session.user_id
+            }
+        })
+    }
+    catch (e) {
+        // handle error of not unique
+        if (e.code === 'P2002')
+            return res.redirect(`/main/own_apps/create?success=false&app_id=${clientId}&redirect_uri=${redirectURI}&unique=false`)
+        else
+            return res.redirect(`/main/own_apps/create?success=false`)
+    }
+
+    return res.redirect(`/main/own_apps`)
+})
+
+// Edit app
+router.get('/own_apps/edit/:clientId', async function (req, res, next) {
+    const clientId = req.params.clientId
+
+    // Validate data
+    if (!clientId) return res.redirect(`/main/own_apps`)
+
+    client = await prisma.client.findFirst({
+        where: {
+            clientId: clientId
+        }
+    })
+
+    if (!client) return res.redirect(`/main/own_apps`)
+
+    // Render page
+    res.render('main/app.html', {
+        base: 'base.html',
+        title: 'Edit App',
+        app_id: client.clientId,
+        redirect_uri: client.redirectUris[0],
+        edit: true
+    })
+})
+
+router.post('/own_apps/edit/:clientId', async function (req, res, next) {
+    const clientId = req.params.clientId
+    const newClientId = req.body.app_id
+    const redirectURI = req.body.redirect_uri
+    const new_token = req.body.new_token
+
+    // Validate data
+    if (!clientId) return res.redirect(`/main/own_apps`)
+
+    client = await prisma.client.findFirst({
+        where: {
+            clientId: clientId
+        }
+    })
+
+    if (!client) return res.redirect(`/main/own_apps`)
+
+    if (!newClientId || !redirectURI)
+        return res.redirect(`/main/own_apps/edit/${clientId}`)
+
+    try {
+        // Update client in db
+        await prisma.client.update({
+            where: {
+                clientId: clientId
+            },
+            data: {
+                clientId: newClientId,
+                clientSecret: new_token === 'on' ? randToken.generate(32) : client.clientSecret,
+                redirectUris: [redirectURI],
+            }
+        })
+    }
+    catch (e) {
+        // handle error of not unique
+        if (e.code === 'P2002')
+            return res.redirect(`/main/own_apps/edit/${clientId}?success=false&unique=false`)
+        else
+            return res.redirect(`/main/own_apps/edit/${clientId}?success=false`)
+    }
+
+    return res.redirect(`/main/own_apps`)
+})
+
+// Delete app
+router.get('/own_apps/delete/:clientId', async function (req, res, next) {
+    const clientId = req.params.clientId
+
+    if (!clientId) return res.redirect(`/main/own_apps`)
+
+    // delete tokens
+    await prisma.token.deleteMany({
+        where: {
+            clientId: clientId
+        }
+    })
+
+    // delete client
+    await prisma.client.delete({
+        where: {
+            clientId: clientId
+        }
+    })
+
+    return res.redirect('/main/own_apps')
 })
 
 module.exports = router

@@ -39,6 +39,7 @@ model Client {
   grants       String[]
   AuthCode     AuthCode[]
   Token        Token[]
+  userId       Int
 }
 
 model Token {
