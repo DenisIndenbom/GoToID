@@ -1,6 +1,7 @@
 // Import libs
 const express = require('express')
 const session = require('express-session')
+const PostgreSqlStore = require('connect-pg-simple')(session);
 const nunjucks = require('nunjucks')
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -22,14 +23,16 @@ const mainRoutes = main.routes
 // Load configuration from .env
 const config = require('dotenv').config({ path: __dirname + '/.env' }).parsed
 
-const port = config.PORT || 3030;
+const databaseURL = config.DATABASE_URL
+const port = config.PORT || 3030
+const secret = config.SECRET
 const debug = config.DEBUG === "true"
 
 // Init template engine
 nunjucks.configure('templates', {
     autoescape: true,
     express: app,
-    noCache: !debug
+    noCache: debug
 })
 
 // Here we are configuring express to use body-parser as middle-ware.
@@ -38,10 +41,11 @@ app.use(bodyParser.json())
 
 // Setting up sessions
 app.use(session({
-    secret: require('crypto').randomBytes(64).toString('hex'),
+    secret: secret,
     resave: true,
-    saveUninitialized: true,
-    cookie: { maxAge: 3 * 24 * 60 * 60 * 1000 } // session is stored for 3 days
+    saveUninitialized: false,
+    cookie: { maxAge: 3 * 24 * 60 * 60 * 1000 }, // session is stored for 3 days
+    store: new PostgreSqlStore({ conString: databaseURL })
 }))
 
 app.use(cors({ origin: true }))

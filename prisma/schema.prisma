@@ -52,3 +52,9 @@ model Token {
   clientId              String
   userId                Int
 }
+
+model session {
+  sid    String @unique
+  sess   Json
+  expire DateTime
+}
