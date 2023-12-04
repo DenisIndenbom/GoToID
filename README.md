@@ -8,7 +8,6 @@ GoToID supports the standard OAuth 2.0 API <br>
 You can create an application on the [GoToID website]() <br>
 Code example: [test-goto-app](https://github.com/DenisIndenbom/gotoid-client-example)
 
-
 ## API
 **Important:** access token must store in header of request.
 ```
