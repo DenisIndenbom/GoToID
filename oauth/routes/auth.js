@@ -95,7 +95,10 @@ router.post('/token', async (req, res, next) => {
     const refresh_token = await prisma.token.findFirst({
       where: {
         refreshToken: token,
-        clientId: clientId
+        clientId: clientId,
+        refreshTokenExpiresAt: {
+          gte: new Date()
+        }
       }
     })
 
