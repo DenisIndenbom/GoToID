@@ -21,7 +21,10 @@ router.get('/', async function (req, res, next) {
 router.get('/third_party_apps', async function (req, res, next) {
     const clients = await prisma.token.findMany({
         where: {
-            userId: req.session.user_id
+            userId: req.session.user_id,
+            accessTokenExpiresAt: {
+                gte: new Date()
+            }
         },
         select: {
             clientId: true,

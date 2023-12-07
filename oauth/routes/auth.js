@@ -113,17 +113,4 @@ router.post('/token', async (req, res, next) => {
   },
 }))  // Sends back token
 
-
-// router.get("/addclient", async (req, res) => {
-
-//   await prisma.client.create({
-//     data: {
-//       clientId: "myClientId",
-//       clientSecret: "clientSecret",
-//       redirectUris: ['http://localhost:3030/client/app'],
-//       grants: ['authorization_code', 'refresh_token'],
-//     }
-//   })
-// })
-
 module.exports = router
