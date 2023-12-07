@@ -43,7 +43,7 @@ app.use(bodyParser.json())
 app.use(session({
     secret: secret,
     resave: true,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: { maxAge: 3 * 24 * 60 * 60 * 1000 }, // session is stored for 3 days
     store: new PostgreSqlStore({ conString: databaseURL })
 }))
