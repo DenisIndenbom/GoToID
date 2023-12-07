@@ -104,6 +104,8 @@ router.post('/token', async (req, res, next) => {
 
     if (refresh_token) return next()
   }
+
+  return res.status(400).send({error: 'Bad request'})
 }, oauthServer.token({
   requireClientAuthentication: { // whether client needs to provide client_secret
     'authorization_code': true,
