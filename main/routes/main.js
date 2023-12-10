@@ -43,7 +43,7 @@ router.get('/third_party_apps/revoke/:clientId', async function (req, res, next)
     const clientId = req.params.clientId
 
     // Validate data
-    if (!clientId) return res.redirect(`/main/third_party_apps`)
+    if (!clientId) return res.redirect(`/third_party_apps`)
 
     // Delete tokens
     await prisma.token.deleteMany({
@@ -53,7 +53,7 @@ router.get('/third_party_apps/revoke/:clientId', async function (req, res, next)
         }
     })
 
-    return res.redirect('/main/third_party_apps')
+    return res.redirect('/third_party_apps')
 })
 
 // Own apps page
@@ -91,7 +91,7 @@ router.post('/own_apps/create', async function (req, res, next) {
 
     // Validate data
     if (!clientId || !redirectURI)
-        return res.redirect(`/main/own_apps/create?success=false&app_id=${clientId}&redirect_uri=${redirectURI}`)
+        return res.redirect(`/own_apps/create?success=false&app_id=${clientId}&redirect_uri=${redirectURI}`)
 
     try {
         await prisma.client.create({
@@ -107,12 +107,12 @@ router.post('/own_apps/create', async function (req, res, next) {
     catch (e) {
         // handle error of not unique
         if (e.code === 'P2002')
-            return res.redirect(`/main/own_apps/create?success=false&app_id=${clientId}&redirect_uri=${redirectURI}&unique=false`)
+            return res.redirect(`/own_apps/create?success=false&app_id=${clientId}&redirect_uri=${redirectURI}&unique=false`)
         else
-            return res.redirect(`/main/own_apps/create?success=false`)
+            return res.redirect(`/own_apps/create?success=false`)
     }
 
-    return res.redirect(`/main/own_apps`)
+    return res.redirect(`/own_apps`)
 })
 
 // Edit app
@@ -120,7 +120,7 @@ router.get('/own_apps/edit/:clientId', async function (req, res, next) {
     const clientId = req.params.clientId
 
     // Validate data
-    if (!clientId) return res.redirect(`/main/own_apps`)
+    if (!clientId) return res.redirect(`/own_apps`)
 
     client = await prisma.client.findFirst({
         where: {
@@ -128,7 +128,7 @@ router.get('/own_apps/edit/:clientId', async function (req, res, next) {
         }
     })
 
-    if (!client) return res.redirect(`/main/own_apps`)
+    if (!client) return res.redirect(`/own_apps`)
 
     // Render page
     res.render('main/app.html', {
@@ -147,7 +147,7 @@ router.post('/own_apps/edit/:clientId', async function (req, res, next) {
     const new_token = req.body.new_token
 
     // Validate data
-    if (!clientId) return res.redirect(`/main/own_apps`)
+    if (!clientId) return res.redirect(`/own_apps`)
 
     client = await prisma.client.findFirst({
         where: {
@@ -155,10 +155,10 @@ router.post('/own_apps/edit/:clientId', async function (req, res, next) {
         }
     })
 
-    if (!client) return res.redirect(`/main/own_apps`)
+    if (!client) return res.redirect(`/own_apps`)
 
     if (!newClientId || !redirectURI)
-        return res.redirect(`/main/own_apps/edit/${clientId}`)
+        return res.redirect(`/own_apps/edit/${clientId}`)
 
     try {
         // Update client in db
@@ -176,19 +176,19 @@ router.post('/own_apps/edit/:clientId', async function (req, res, next) {
     catch (e) {
         // handle error of not unique
         if (e.code === 'P2002')
-            return res.redirect(`/main/own_apps/edit/${clientId}?success=false&unique=false`)
+            return res.redirect(`/own_apps/edit/${clientId}?success=false&unique=false`)
         else
-            return res.redirect(`/main/own_apps/edit/${clientId}?success=false`)
+            return res.redirect(`/own_apps/edit/${clientId}?success=false`)
     }
 
-    return res.redirect(`/main/own_apps`)
+    return res.redirect(`/own_apps`)
 })
 
 // Delete app
 router.get('/own_apps/delete/:clientId', async function (req, res, next) {
     const clientId = req.params.clientId
 
-    if (!clientId) return res.redirect(`/main/own_apps`)
+    if (!clientId) return res.redirect(`/own_apps`)
 
     // delete tokens
     await prisma.token.deleteMany({
@@ -204,7 +204,7 @@ router.get('/own_apps/delete/:clientId', async function (req, res, next) {
         }
     })
 
-    return res.redirect('/main/own_apps')
+    return res.redirect('/own_apps')
 })
 
 module.exports = router

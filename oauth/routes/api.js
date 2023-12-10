@@ -5,9 +5,9 @@ const router = express.Router() // Instantiate a new router
 
 router.get('/', (req, res) => res.json({ success: true }))
 
-router.get('/userinfo', async (req, res) => {
+router.get('/user', async (req, res) => {
   let accessToken = req.headers.authorization.split()[1]
-  
+
   const user = (await prisma.token.findFirst({
     where: {
       accessToken: accessToken
@@ -17,7 +17,13 @@ router.get('/userinfo', async (req, res) => {
     }
   })).user
 
-  res.json({ user_id: user.id, username: user.username, createdAt: user.createdAt})
+  res.json({
+    user_id: user.id,
+    username: user.username,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    createdAt: user.createdAt
+  })
 })
 
 module.exports = router

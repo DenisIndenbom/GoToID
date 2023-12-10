@@ -32,6 +32,7 @@ router.post('/', async (req, res) => {
     // login user
     req.session.user_id = user.id
     req.session.username = user.username
+    req.session.fullname = { firstName: user.firstName, lastName: user.lastName }
 
     return res.redirect('/')
 })

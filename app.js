@@ -59,8 +59,7 @@ app.use('/api', oauthServer.authenticate(), authRoutes.api)
 app.use('/register', authorizationRoutes.register)
 app.use('/login', authorizationRoutes.login)
 app.use('/logout', (req, res) => {req.session.destroy(); res.redirect('/login')})
-app.use('/main', (req, res, next) => methods.auth(req, res, next, '/login'), mainRoutes.main)
-app.use('/', (req, res, next) => methods.auth(req, res, next, '/login'), (req, res) => res.redirect('/main'))
+app.use('/', (req, res, next) => methods.auth(req, res, next, '/login'), mainRoutes.main)
 
 app.listen(port)
 
