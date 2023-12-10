@@ -20,8 +20,8 @@ router.get('/user', async (req, res) => {
   res.json({
     user_id: user.id,
     username: user.username,
-    firstName: user.firstName,
-    lastName: user.lastName,
+    first_name: user.firstName,
+    last_name: user.lastName,
     createdAt: user.createdAt
   })
 })
