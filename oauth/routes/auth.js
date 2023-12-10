@@ -45,7 +45,7 @@ router.post('/authorize', async (req, res, next) => {
     return next()
   }
 
-  return res.redirect(`/oauth?success=false&${params}`)
+  return res.redirect(`/oauth?success=false&${params}&wrong_password=true`)
 }, oauthServer.authorize({
   authenticateHandler: {
     handle: req => {

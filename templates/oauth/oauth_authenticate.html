@@ -10,20 +10,9 @@
                 <h2 class="fw-bold mb-2 text-uppercase">OAuth GoToID</h2>
                 <p class="text-white-50 mb-3">Please enter your username and password!</p>
               </div>
-              <!-- <div class="alert alert-warning">
-                <div>
-                  By clicking on the submit button, you <strong>agree</strong> provide your account
-                  data to the application.
-                </div>
-                <br>
-                <div>The account stores:</div>
-                <ul>
-                  <li>ID</li>
-                  <li>email</li>
-                  <li>name</li>
-                  <li>date of account creation</li>
-                </ul>
-              </div> -->
+              <div class="password-warning" style="visibility: hidden; display: none;">
+                  <div class="alert alert-warning" role="alert">Wrong username or password!</div>
+              </div>
               <form action="/oauth/authorize" method="post" class="needs-validation" novalidate>
                 <input class="form-control" name="client_id" type="hidden" />
                 <input class="form-control" name="redirect_uri" type="hidden" />
@@ -71,6 +60,7 @@
     </div>
   </div>
   <script src="/static/js/validate_form.js"></script>
+  <script src="/static/js/warning_handler.js"></script>
   <script>
     (function () {
       const urlParams = new URLSearchParams(decodeURIComponent(window.location.search));
