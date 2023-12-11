@@ -43,6 +43,8 @@ router.get('/third_party_apps/revoke/:clientId', async function (req, res, next)
     const clientId = req.params.clientId
 
     // Validate data
+    
+    // redirect to third party apps if clientId is not set
     if (!clientId) return res.redirect(`/third_party_apps`)
 
     // Delete tokens
@@ -105,7 +107,7 @@ router.post('/own_apps/create', async function (req, res, next) {
         })
     }
     catch (e) {
-        // handle error of not unique
+        // If the user is a P2002 or P2002 redirect to the app.
         if (e.code === 'P2002')
             return res.redirect(`/own_apps/create?success=false&app_id=${clientId}&redirect_uri=${redirectURI}&unique=false`)
         else
@@ -120,6 +122,8 @@ router.get('/own_apps/edit/:clientId', async function (req, res, next) {
     const clientId = req.params.clientId
 
     // Validate data
+    
+    // redirect to the app that is not connected to the server
     if (!clientId) return res.redirect(`/own_apps`)
 
     client = await prisma.client.findFirst({
@@ -128,6 +132,7 @@ router.get('/own_apps/edit/:clientId', async function (req, res, next) {
         }
     })
 
+    // redirect to the app s own apps
     if (!client) return res.redirect(`/own_apps`)
 
     // Render page
@@ -147,6 +152,8 @@ router.post('/own_apps/edit/:clientId', async function (req, res, next) {
     const new_token = req.body.new_token
 
     // Validate data
+    
+    // redirect to the app that is not connected to the server
     if (!clientId) return res.redirect(`/own_apps`)
 
     client = await prisma.client.findFirst({
@@ -155,8 +162,10 @@ router.post('/own_apps/edit/:clientId', async function (req, res, next) {
         }
     })
 
+    // redirect to the app s own apps
     if (!client) return res.redirect(`/own_apps`)
 
+    // redirect to the edit page if the client id is not newClientId or redirectURI is not set.
     if (!newClientId || !redirectURI)
         return res.redirect(`/own_apps/edit/${clientId}`)
 
@@ -174,7 +183,7 @@ router.post('/own_apps/edit/:clientId', async function (req, res, next) {
         })
     }
     catch (e) {
-        // handle error of not unique
+        // redirect to the edit page if the user is a P2002
         if (e.code === 'P2002')
             return res.redirect(`/own_apps/edit/${clientId}?success=false&unique=false`)
         else
@@ -188,6 +197,7 @@ router.post('/own_apps/edit/:clientId', async function (req, res, next) {
 router.get('/own_apps/delete/:clientId', async function (req, res, next) {
     const clientId = req.params.clientId
 
+    // redirect to the app that is not connected to the server
     if (!clientId) return res.redirect(`/own_apps`)
 
     // delete tokens
