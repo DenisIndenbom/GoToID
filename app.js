@@ -54,12 +54,27 @@ app.use(cors({ origin: true }))
 app.use('/static', express.static(__dirname + '/static'));
 
 // add cors to all routes
-app.use('/oauth', authRoutes.auth) 
-app.use('/api', oauthServer.authenticate(), authRoutes.api) 
+app.use('/oauth', authRoutes.auth)
+app.use('/api', oauthServer.authenticate(), authRoutes.api)
 app.use('/register', authorizationRoutes.register)
 app.use('/login', authorizationRoutes.login)
-app.use('/logout', (req, res) => {req.session.destroy(); res.redirect('/login')})
+app.use('/logout', (req, res) => { req.session.destroy(); res.redirect('/login') })
 app.use('/', (req, res, next) => methods.auth(req, res, next, '/login'), mainRoutes.main)
+
+// handle 404
+app.use(function (req, res, next) {
+    res.status(404)
+    // respond with html page
+    if (req.accepts('html')) {
+        return res.render('404.html', { base: 'base.html' })
+    }
+    // respond with json
+    if (req.accepts('json')) {
+        return res.json({ state: 'error', code: 'not_found', error: 'Not found' })
+    }
+    // default to plain-text. send()
+    return res.type('txt').send('Not found')
+})
 
 app.listen(port)
 
