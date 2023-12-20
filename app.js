@@ -2,11 +2,11 @@
 const express = require('express')
 const session = require('express-session')
 
-const https = require('https');
-const http = require('http');
+const https = require('https')
+const http = require('http')
 
 const fs = require('fs')
-const PostgreSqlStore = require('connect-pg-simple')(session);
+const PostgreSqlStore = require('connect-pg-simple')(session)
 
 const nunjucks = require('nunjucks')
 const bodyParser = require('body-parser')
@@ -58,7 +58,7 @@ app.use(session({
 app.use(cors({ origin: true }))
 
 // add static folder
-app.use('/static', express.static(__dirname + '/static'));
+app.use('/static', express.static(__dirname + '/static'))
 
 // add cors to all routes
 app.use('/oauth', authRoutes.auth)
@@ -86,18 +86,18 @@ app.use(function (req, res, next) {
 // Run app
 
 if (SSL) {
-    const httpsServer = https.createServer({
-        key: fs.readFileSync('/etc/letsencrypt/live/my_api_url/privkey.pem'),
-        cert: fs.readFileSync('/etc/letsencrypt/live/my_api_url/fullchain.pem'),
-    }, app);
+     const httpsServer = https.createServer({
+        key: fs.readFileSync(__dirname + '/.ssl/key.pem'),
+        cert: fs.readFileSync(__dirname + '/.ssl/cert.pem'),
+    }, app)
 
     httpsServer.listen(port, () => {
-        console.log(`GoToID server running on port ${port} over https protocol`);
-    });
+        console.log(`GoToID server running on port ${port} over https protocol`)
+    })
 }
 else {
-    const httpServer = http.createServer(app);
+    const httpServer = http.createServer(app)
     httpServer.listen(port, () => {
-        console.log(`GoToID server running on port ${port} over http protocol`);
-    });
+        console.log(`GoToID server running on port ${port} over http protocol`)
+    })
 }
