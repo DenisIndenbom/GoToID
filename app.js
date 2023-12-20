@@ -25,8 +25,9 @@ const config = require('dotenv').config({ path: __dirname + '/.env' }).parsed
 
 const databaseURL = config.DATABASE_URL
 const port = config.PORT || 3030
+const SSL = config.SSL === 'true'
 const secret = config.SECRET
-const debug = config.DEBUG === "true"
+const debug = config.DEBUG === 'true'
 
 // Init template engine
 nunjucks.configure('templates', {
@@ -76,6 +77,21 @@ app.use(function (req, res, next) {
     return res.type('txt').send('Not found')
 })
 
-app.listen(port)
+// Run app
 
-console.log("GoToID Server listening on port:", port)
+if (SSL) {
+    const httpsServer = https.createServer({
+        key: fs.readFileSync('/etc/letsencrypt/live/my_api_url/privkey.pem'),
+        cert: fs.readFileSync('/etc/letsencrypt/live/my_api_url/fullchain.pem'),
+    }, app);
+
+    httpsServer.listen(port, () => {
+        console.log(`GoToID server running on port ${port} over https protocol`);
+    });
+}
+else {
+    const httpServer = http.createServer(app);
+    httpServer.listen(port, () => {
+        console.log(`GoToID server running on port ${port} over http protocol`);
+    });
+}
