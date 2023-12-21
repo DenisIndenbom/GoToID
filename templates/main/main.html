@@ -10,7 +10,9 @@
           <div class="vstack gap-3">
             <a href="/third_party_apps" class="btn btn-outline-light btn-lg px-5 mb-3 text-uppercase">third-party apps</a>
             <a href="/own_apps" class="btn btn-outline-light btn-lg px-5 mb-3 text-uppercase">own apps</a>
+            {% if is_auth %}
             <a href="/logout" class="btn btn-outline-light btn-lg px-5 mb-3 text-uppercase">logout</a>
+            {% endif %}
           </div>
         </div>
       </div>

@@ -19,7 +19,6 @@ const app = express()
 const oauth = require('./oauth')
 const authorization = require('./authorization')
 const main = require('./main')
-const methods = require('./methods')
 
 const oauthServer = oauth.oauthServer
 const authRoutes = oauth.routes
@@ -50,7 +49,7 @@ app.use(bodyParser.json())
 app.use(session({
     secret: secret,
     resave: true,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { maxAge: 3 * 24 * 60 * 60 * 1000 }, // session is stored for 3 days
     store: new PostgreSqlStore({ conString: databaseURL })
 }))
@@ -66,7 +65,7 @@ app.use('/api', oauthServer.authenticate(), authRoutes.api)
 app.use('/register', authorizationRoutes.register)
 app.use('/login', authorizationRoutes.login)
 app.use('/logout', (req, res) => { req.session.destroy(); res.redirect('/login') })
-app.use('/', (req, res, next) => methods.auth(req, res, next, '/login'), mainRoutes.main)
+app.use('/', mainRoutes.main)
 
 // handle 404
 app.use(function (req, res, next) {

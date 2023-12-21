@@ -1,4 +1,3 @@
-const path = require('path') // has path and __dirname
 const express = require('express')
 
 const prisma = require('../../lib/prisma')
@@ -8,17 +7,22 @@ const randToken = require('rand-token').generator({
 
 const router = express.Router() // Instantiate a new router
 
+const methods = require('../../methods')
+
+function auth_handler(req, res, next) { methods.auth(req, res, next, '/login') }
+
 // Main page
 router.get('/', async function (req, res, next) {
     res.render('main/main.html', {
         base: 'base.html',
         title: 'Main',
-        username: (req.session && req.session.username) ? req.session.username : 'gotoman'
+        username: (req.session && req.session.username) ? req.session.username : 'gotoman',
+        is_auth: (req.session && req.session.username)
     })
 })
 
 // Third party apps pages
-router.get('/third_party_apps', async function (req, res, next) {
+router.get('/third_party_apps', auth_handler, async function (req, res, next) {
     const clients = await prisma.token.findMany({
         where: {
             userId: req.session.user_id,
@@ -39,11 +43,11 @@ router.get('/third_party_apps', async function (req, res, next) {
 })
 
 // Revoke access
-router.get('/third_party_apps/revoke/:clientId', async function (req, res, next) {
+router.get('/third_party_apps/revoke/:clientId', auth_handler, async function (req, res, next) {
     const clientId = req.params.clientId
 
     // Validate data
-    
+
     // redirect to third party apps if clientId is not set
     if (!clientId) return res.redirect(`/third_party_apps`)
 
@@ -59,7 +63,7 @@ router.get('/third_party_apps/revoke/:clientId', async function (req, res, next)
 })
 
 // Own apps page
-router.get('/own_apps', async function (req, res, next) {
+router.get('/own_apps', auth_handler, async function (req, res, next) {
     const clients = await prisma.client.findMany({
         where: {
             userId: req.session.user_id
@@ -79,7 +83,7 @@ router.get('/own_apps', async function (req, res, next) {
 })
 
 // Create app
-router.get('/own_apps/create', async function (req, res, next) {
+router.get('/own_apps/create', auth_handler, async function (req, res, next) {
     res.render('main/app.html', {
         base: 'base.html',
         title: 'Create App',
@@ -87,7 +91,7 @@ router.get('/own_apps/create', async function (req, res, next) {
     })
 })
 
-router.post('/own_apps/create', async function (req, res, next) {
+router.post('/own_apps/create', auth_handler, async function (req, res, next) {
     const clientId = req.body.app_id
     const redirectURI = req.body.redirect_uri
 
@@ -118,11 +122,11 @@ router.post('/own_apps/create', async function (req, res, next) {
 })
 
 // Edit app
-router.get('/own_apps/edit/:clientId', async function (req, res, next) {
+router.get('/own_apps/edit/:clientId', auth_handler, async function (req, res, next) {
     const clientId = req.params.clientId
 
     // Validate data
-    
+
     // redirect to the app that is not connected to the server
     if (!clientId) return res.redirect(`/own_apps`)
 
@@ -145,14 +149,14 @@ router.get('/own_apps/edit/:clientId', async function (req, res, next) {
     })
 })
 
-router.post('/own_apps/edit/:clientId', async function (req, res, next) {
+router.post('/own_apps/edit/:clientId', auth_handler, async function (req, res, next) {
     const clientId = req.params.clientId
     const newClientId = req.body.app_id
     const redirectURI = req.body.redirect_uri
     const new_token = req.body.new_token
 
     // Validate data
-    
+
     // redirect to the app that is not connected to the server
     if (!clientId) return res.redirect(`/own_apps`)
 
@@ -194,7 +198,7 @@ router.post('/own_apps/edit/:clientId', async function (req, res, next) {
 })
 
 // Delete app
-router.get('/own_apps/delete/:clientId', async function (req, res, next) {
+router.get('/own_apps/delete/:clientId', auth_handler, async function (req, res, next) {
     const clientId = req.params.clientId
 
     // redirect to the app that is not connected to the server
