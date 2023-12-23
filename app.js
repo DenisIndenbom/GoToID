@@ -90,13 +90,9 @@ if (SSL) {
         cert: fs.readFileSync(__dirname + '/.ssl/cert.pem'),
     }, app)
 
-    httpsServer.listen(port, () => {
-        console.log(`GoToID server running on port ${port} over https protocol`)
-    })
+    httpsServer.listen(port)
 }
 else {
     const httpServer = http.createServer(app)
-    httpServer.listen(port, () => {
-        console.log(`GoToID server running on port ${port} over http protocol`)
-    })
+    httpServer.listen(port)
 }

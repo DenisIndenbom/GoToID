@@ -4,7 +4,8 @@
   "description": "GoTo oauth server",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node cluster.js",
+    "dev": "node dev.js",
     "db:migrate": "npx prisma migrate dev",
     "db:deploy": "npx prisma migrate deploy"
   },
