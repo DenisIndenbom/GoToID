@@ -47,10 +47,11 @@ app.use(bodyParser.json())
 
 // Setting up sessions
 app.use(session({
+    name: 'gotoid.sid',
     secret: secret,
     resave: true,
     saveUninitialized: false,
-    cookie: { maxAge: 3 * 24 * 60 * 60 * 1000 }, // session is stored for 3 days
+    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 }, // session is stored for 7 days
     store: new PostgreSqlStore({ conString: databaseURL })
 }))
 
