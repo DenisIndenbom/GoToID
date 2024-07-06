@@ -15,6 +15,12 @@ const cors = require('cors')
 // Init express
 const app = express()
 
+// Load configuration from .env
+const config = require('dotenv').config({ path: __dirname + '/.env' }).parsed
+
+// Save configuration in global
+global.config = config
+
 // Load app resources
 const oauth = require('./oauth')
 const authorization = require('./authorization')
@@ -24,9 +30,6 @@ const oauthServer = oauth.oauthServer
 const authRoutes = oauth.routes
 const authorizationRoutes = authorization.routes
 const mainRoutes = main.routes
-
-// Load configuration from .env
-const config = require('dotenv').config({ path: __dirname + '/.env' }).parsed
 
 const databaseURL = config.DATABASE_URL
 const port = config.PORT || 3030
@@ -83,17 +86,24 @@ app.use(function (req, res, next) {
     return res.type('txt').send('Not found')
 })
 
+// Launch telegram bot
+require('./lib/telegram_bot.js')
+
+
 // Run app
+module.exports = (is_main) => {
+    global.is_main = is_main
+    
+    if (SSL) {
+        const httpsServer = https.createServer({
+            key: fs.readFileSync(__dirname + '/.ssl/key.pem'),
+            cert: fs.readFileSync(__dirname + '/.ssl/cert.pem'),
+        }, app)
 
-if (SSL) {
-     const httpsServer = https.createServer({
-        key: fs.readFileSync(__dirname + '/.ssl/key.pem'),
-        cert: fs.readFileSync(__dirname + '/.ssl/cert.pem'),
-    }, app)
-
-    httpsServer.listen(port)
-}
-else {
-    const httpServer = http.createServer(app)
-    httpServer.listen(port)
+        httpsServer.listen(port)
+    }
+    else {
+        const httpServer = http.createServer(app)
+        httpServer.listen(port)
+    }
 }
