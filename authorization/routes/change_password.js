@@ -33,7 +33,7 @@ router.post('/', auth_handler, async (req, res) => {
     })
 
     // Check password
-    const correct_password = user ? await comparePassword(new_password, user.password) : false
+    const correct_password = user ? await comparePassword(old_password, user.password) : false
 
     // Redirect to change_password if user is not set
     if (!user || !correct_password)
@@ -51,7 +51,7 @@ router.post('/', auth_handler, async (req, res) => {
 
     //Rredirect to change_password if update_user is null
     if (!update_user)
-        return res.redirect(`/change_password?success=false&old_password=${old_password}${!correct_password ? '&wrong_password=true' : ''}`)
+        return res.redirect(`/change_password?success=false&old_password=${old_password}&change_password_error=true`)
 
     return res.redirect('/')
 })
