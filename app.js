@@ -68,6 +68,7 @@ app.use('/oauth', authRoutes.auth)
 app.use('/api', oauthServer.authenticate(), authRoutes.api)
 app.use('/register', authorizationRoutes.register)
 app.use('/login', authorizationRoutes.login)
+app.use('/change_password', authorizationRoutes.change_password)
 app.use('/logout', (req, res) => { req.session.destroy(); res.redirect('/login') })
 app.use('/', mainRoutes.main)
 

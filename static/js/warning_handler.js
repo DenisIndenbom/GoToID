@@ -9,4 +9,7 @@
 
     if (urlParams.get('wrong_password') === 'true')
         document.body.querySelector('.password-warning').style.cssText = 'visibility: visible; display: block;';
+
+    if (urlParams.get('change_password_error') === 'true')
+        document.body.querySelector('.change-password-warning').style.cssText = 'visibility: visible; display: block;';
 })()

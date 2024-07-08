@@ -6,7 +6,7 @@ const hashPassword = require('../../methods').passwordHashing.hashPassword
 const router = express.Router() // Instantiate a new router
 
 router.get('/', (req, res) => {  // send back a simple form for the auth
-  res.render('authorization/register.html', {
+  return res.render('authorization/register.html', {
     base: 'base.html',
     title: 'Register',
   })

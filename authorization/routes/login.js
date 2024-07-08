@@ -6,7 +6,7 @@ const comparePassword = require('../../methods').passwordHashing.comparePassword
 const router = express.Router() // Instantiate a new router
 
 router.get('/', (req, res) => {  // send back a simple form for the auth
-    res.render('authorization/login.html', {
+    return res.render('authorization/login.html', {
         base: 'base.html',
         title: 'Login',
     })

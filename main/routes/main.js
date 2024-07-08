@@ -13,7 +13,7 @@ function auth_handler(req, res, next) { methods.auth(req, res, next, '/login') }
 
 // Main page
 router.get('/', async function (req, res, next) {
-    res.render('main/main.html', {
+    return res.render('main/main.html', {
         base: 'base.html',
         title: 'Main',
         username: (req.session && req.session.username) ? req.session.username : 'gotoman',
@@ -35,7 +35,7 @@ router.get('/third_party_apps', auth_handler, async function (req, res, next) {
         }
     })
 
-    res.render('main/third_party_apps.html', {
+    return res.render('main/third_party_apps.html', {
         base: 'base.html',
         title: 'Third-party apps',
         apps: clients ? clients : []
@@ -75,7 +75,7 @@ router.get('/own_apps', auth_handler, async function (req, res, next) {
         }
     })
 
-    res.render('main/own_apps.html', {
+    return res.render('main/own_apps.html', {
         base: 'base.html',
         title: 'Create App',
         apps: clients ? clients : []
@@ -84,7 +84,7 @@ router.get('/own_apps', auth_handler, async function (req, res, next) {
 
 // Create app
 router.get('/own_apps/create', auth_handler, async function (req, res, next) {
-    res.render('main/app.html', {
+    return res.render('main/app.html', {
         base: 'base.html',
         title: 'Create App',
         edit: false
@@ -140,7 +140,7 @@ router.get('/own_apps/edit/:clientId', auth_handler, async function (req, res, n
     if (!client) return res.redirect(`/own_apps`)
 
     // Render page
-    res.render('main/app.html', {
+    return res.render('main/app.html', {
         base: 'base.html',
         title: 'Edit App',
         app_id: client.clientId,
