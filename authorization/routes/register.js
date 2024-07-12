@@ -45,6 +45,7 @@ router.post('/', async (req, res) => {
         username: username,
         firstName: firstName,
         lastName: lastName,
+        type: invite.account_type,
         password: await hashPassword(password)
       }
     })
