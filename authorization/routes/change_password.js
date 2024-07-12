@@ -49,7 +49,7 @@ router.post('/', auth_handler, async (req, res) => {
         }
     })
 
-    //Rredirect to change_password if update_user is null
+    // Rredirect to change_password if update_user is null
     if (!update_user)
         return res.redirect(`/change_password?success=false&old_password=${old_password}&change_password_error=true`)
 
