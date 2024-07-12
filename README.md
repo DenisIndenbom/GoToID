@@ -85,7 +85,8 @@ GET /api/user
     "user_id": 1,
     "username": "name",
     "first_name": "first name",
-    "last_name": "last name", 
+    "last_name": "last name",
+    "type": "student", 
     "createdAt": "2023-12-02 00:00:00"
 }
 ```
