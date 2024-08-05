@@ -23,6 +23,15 @@ model User {
   updatedAt DateTime   @updatedAt
   AuthCode  AuthCode[]
   Token     Token[]
+  Profile   Profile?
+}
+
+model Profile {
+  userId     Int    @unique
+  avatarURL  String
+  telegramID Int
+  // TODO: Add something else
+  user       User?  @relation(fields: [userId], references: [id])
 }
 
 model InviteCode {
