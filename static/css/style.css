@@ -8,3 +8,7 @@ body {
     vertical-align: middle;
     border-radius: 50%;
 }
+
+.rb {
+    border-radius: 1rem;
+}
