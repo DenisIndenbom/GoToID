@@ -1,22 +1,23 @@
 {% extends base %}
 {% block content %}
-  <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-    <div class="card bg-dark text-white" style="border-radius: 1rem;">
-      <div class="card-body p-4">
-        <div class="mb-md-2 mt-md-3 pb-0 text-center">
-          <div class="text-center mb-4">
-            <h2 class="fw-bold mb-2 text-uppercase">Hi, {{ username }}</h2>
-          </div>
-          <div class="vstack gap-3">
-            <a href="/third_party_apps" class="btn btn-outline-light btn-lg px-5 mb-3 text-uppercase">third-party apps</a>
-            <a href="/own_apps" class="btn btn-outline-light btn-lg px-5 mb-3 text-uppercase">own apps</a>
-            {% if is_auth %}
-            <a href="/change_password" class="btn btn-outline-light btn-lg px-5 mb-3 text-uppercase">change password</a>
-            <a href="/logout" class="btn btn-outline-light btn-lg px-5 mb-3 text-uppercase">logout</a>
-            {% endif %}
-          </div>
+<div class="col-12 col-md-8 col-lg-6 col-xl-4">
+  <div class="card bg-dark text-white" style="border-radius: 1rem;">
+    <div class="card-body p-3">
+      <div class="mb-md-2 mt-md-3 pb-0 text-center">
+        <div class="text-center mb-4">
+          <img src="/static/images/goto_man.jpg" class="avatar mb-2" alt="User-Profile-Image">
+          <h2 class="fw-bold mb-2 text-uppercase">{{ username }}</h2>
+        </div>
+        <div class="btn-group-vertical gap-2">
+          <a href="/third_party_apps" class="btn btn-outline-light btn-lg px-5 mb-2 text-uppercase">third-party apps</a>
+          <a href="/own_apps" class="btn btn-outline-light btn-lg px-5 mb-2 text-uppercase">own apps</a>
+          {% if is_auth %}
+          <a href="/change_password" class="btn btn-outline-light btn-lg px-5 mb-2 text-uppercase">change password</a>
+          <a href="/logout" class="btn btn-outline-light btn-lg px-5 mb-2 text-uppercase">logout</a>
+          {% endif %}
         </div>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
