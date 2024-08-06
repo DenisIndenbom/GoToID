@@ -26,13 +26,14 @@ router.post('/', async (req, res) => {
 
     const correct_password = user ? await comparePassword(password, user.password) : false
 
-    if (!user || !correct_password) 
-        return res.redirect(`/login?success=false&username=${username}${!correct_password ? '&wrong_password=true': ''}`)
+    if (!user || !correct_password)
+        return res.redirect(`/login?success=false&username=${username}${!correct_password ? '&wrong_password=true' : ''}`)
 
     // login user
     req.session.user_id = user.id
     req.session.username = user.username
     req.session.fullname = { firstName: user.firstName, lastName: user.lastName }
+    req.session.user_type = user.type
 
     return res.redirect('/')
 })

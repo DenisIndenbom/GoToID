@@ -70,7 +70,9 @@ app.use('/register', authorizationRoutes.register)
 app.use('/login', authorizationRoutes.login)
 app.use('/change_password', authorizationRoutes.change_password)
 app.use('/logout', (req, res) => { req.session.destroy(); res.redirect('/login') })
+app.use('/profile', mainRoutes.profile)
 app.use('/', mainRoutes.main)
+
 
 // handle 404
 app.use(function (req, res, next) {
@@ -94,7 +96,7 @@ require('./lib/telegram_bot.js')
 // Run app
 module.exports = (is_main) => {
     global.is_main = is_main
-    
+
     if (SSL) {
         const httpsServer = https.createServer({
             key: fs.readFileSync(__dirname + '/.ssl/key.pem'),
