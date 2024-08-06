@@ -34,7 +34,32 @@ router.get('/my', auth_handler, async function (req, res, next) {
     })
 })
 
-router.get('/:username', auth_handler, async function (req, res, next) {
+router.get('/my/edit', auth_handler, async function (req, res, next) {
+    profile = await prisma.profile.findFirst({
+        where: {
+            userId: req.session.user_id
+        }
+    })
+
+    if (!profile) {
+        profile = await prisma.profile.create({
+            data: {
+                userId: req.session.user_id
+            }
+        })
+    }
+
+    return res.render('main/edit_profile.html', {
+        base: 'base.html',
+        title: 'Profile',
+        username: req.session.username,
+        fullname: req.session.fullname,
+        usertype: req.session.user_type,
+        profile: profile,
+    })
+})
+
+router.get('/:username', async function (req, res, next) {
     const username = req.params.username
 
     user = await prisma.user.findFirst({

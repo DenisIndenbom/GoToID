@@ -2,14 +2,23 @@ body {
     background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
 }
 
+.default-avatar {
+    background-image: url(/static/images/goto_man.jpg);
+    background-size: cover;
+}
+
 .avatar {
     width: 150px;
     height: 150px;
     vertical-align: middle;
     border-radius: 50%;
-    
+
 }
 
-.rb {
+.gradient-text {
+    background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+}
+
+​.rb {
     border-radius: 1rem;
 }

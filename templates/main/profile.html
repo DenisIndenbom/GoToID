@@ -16,13 +16,23 @@
                         <div class="row pt-1">
                             <div class="col-6 mb-3">
                                 <h6>Email</h6>
-                                <p class="text-muted">{% if profile.email %}{{ profile.email }}{% else %}not specified{%
-                                    endif %}</p>
+                                <p class="text-muted">
+                                    {% if profile.email %}
+                                    {{ profile.email }}
+                                    {% else %}
+                                    not specified
+                                    {% endif %}
+                                </p>
                             </div>
                             <div class="col-6 mb-3">
                                 <h6>Telegram</h6>
-                                <p class="text-muted">{% if profile.telegramID %}{{ profile.telegramID }}{% else %}not
-                                    specified{% endif %}</p>
+                                <p class="text-muted">
+                                    {% if profile.telegram %}
+                                    {{ profile.telegram }}
+                                    {% else %}
+                                    not specified
+                                    {% endif %}
+                                </p>
                             </div>
                         </div>
                         <div class="row pt-1">
@@ -32,8 +42,13 @@
                             </div>
                             <div class="col-6 mb-3">
                                 <h6>About</h6>
-                                <p class="text-muted">{% if profile.about %}{{ profile.about }}{% else %}not specified{%
-                                    endif %}</p>
+                                <p class="text-muted">
+                                    {% if profile.about %}
+                                    {{ profile.about }}
+                                    {% else %}
+                                    not specified
+                                    {%endif %}
+                                </p>
                             </div>
                         </div>
 
@@ -43,7 +58,7 @@
                         <a href="/" class="btn btn-outline-light btn-rounded btn-lg ">
                             Back
                         </a>
-                        <a href="/profile/edit" class="btn btn-outline-light btn-rounded btn-lg ">
+                        <a href="/profile/my/edit" class="btn btn-outline-light btn-rounded btn-lg ">
                             Edit now
                         </a>
                         {% else %}
