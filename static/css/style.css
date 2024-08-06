@@ -12,13 +12,4 @@ body {
     height: 150px;
     vertical-align: middle;
     border-radius: 50%;
-
-}
-
-.gradient-text {
-    background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
-}
-
-​.rb {
-    border-radius: 1rem;
 }
