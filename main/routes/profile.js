@@ -8,7 +8,7 @@ const methods = require('../../methods')
 
 function auth_handler(req, res, next) { methods.auth(req, res, next, '/login') }
 
-router.get('/', auth_handler, async function (req, res, next) {
+router.get('/my', auth_handler, async function (req, res, next) {
     profile = await prisma.profile.findFirst({
         where: {
             userId: req.session.user_id
@@ -31,6 +31,40 @@ router.get('/', auth_handler, async function (req, res, next) {
         usertype: req.session.user_type,
         profile: profile,
         is_my: true
+    })
+})
+
+router.get('/:username', auth_handler, async function (req, res, next) {
+    const username = req.params.username
+
+    user = await prisma.user.findFirst({
+        where: {
+            username: username
+        }
+    })
+
+    if (!user) {
+        return res.redirect('/notfound')
+    }
+
+    profile = await prisma.profile.findFirst({
+        where: {
+            userId: user.id
+        }
+    })
+
+    if (!profile) {
+        return res.redirect('/notfound')
+    }
+
+    return res.render('main/profile.html', {
+        base: 'base.html',
+        title: 'Profile',
+        username: user.username,
+        fullname: { firstName: user.firstName, lastName: user.lastName },
+        usertype: user.type,
+        profile: profile,
+        is_my: false
     })
 })
 
