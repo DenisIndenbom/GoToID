@@ -132,7 +132,8 @@ router.get('/own_apps/edit/:clientId', auth_handler, async function (req, res, n
 
     client = await prisma.client.findFirst({
         where: {
-            clientId: clientId
+            clientId: clientId,
+            userId: req.session.user_id
         }
     })
 
@@ -162,7 +163,8 @@ router.post('/own_apps/edit/:clientId', auth_handler, async function (req, res, 
 
     client = await prisma.client.findFirst({
         where: {
-            clientId: clientId
+            clientId: clientId,
+            userId: req.session.user_id
         }
     })
 
@@ -201,20 +203,30 @@ router.post('/own_apps/edit/:clientId', auth_handler, async function (req, res, 
 router.get('/own_apps/delete/:clientId', auth_handler, async function (req, res, next) {
     const clientId = req.params.clientId
 
-    // redirect to the app that is not connected to the server
+    // redirect to own_apps if param is null
     if (!clientId) return res.redirect(`/own_apps`)
+
+    const client = await prisma.client.findFirst({
+        where: {
+            clientId: clientId,
+            userId: req.session.user_id
+        }
+    })
+
+    // redirect to own_apps if client does not exist
+    if (!client) return res.redirect('/own_apps')
 
     // delete tokens
     await prisma.token.deleteMany({
         where: {
-            clientId: clientId
+            clientId: client.clientId
         }
     })
 
     // delete client
     await prisma.client.delete({
         where: {
-            clientId: clientId
+            clientId: client.clientId
         }
     })
 
