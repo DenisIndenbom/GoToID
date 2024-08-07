@@ -2,10 +2,10 @@
     avatar = document.getElementById('avatar')
     field = document.getElementById('avatarURL')
 
-    avatar.src = '/static/images/goto_man.jpg'
+    default_path = '/static/images/goto_man.jpg'
 
     avatar.onerror = () => {
-        avatar.src = '/static/images/goto_man.jpg'
+        avatar.src = default_path
     }
 
     field.onchange = () => {

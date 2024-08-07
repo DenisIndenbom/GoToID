@@ -8,7 +8,7 @@
                     <div class="row">
                         <div class="col">
                             <div class="col d-flex justify-content-center align-items-center mb-3">
-                                <img src="{{ profile.avatar.URL }}" class="avatar" id="avatar" />
+                                <img src="/static/images/goto_man.jpg" class="avatar" id="avatar" />
                             </div>
                             <span class="col d-flex justify-content-center align-items-center mb-3">
                                 <h4><strong>150x150</strong></h4>
@@ -81,7 +81,13 @@
                                         <div class="input-group">
                                             <span class="input-group-text">@</span>
                                             <input class="form-control" type="text" name="telegram" placeholder="username"
-                                                value="{{ profile.telegram }}" pattern="^[a-z0-9_]$">
+                                                value="{{ profile.telegram }}" pattern="^[a-z0-9_]{5,15}$">
+                                            <div class="invalid-feedback">
+                                                Please enter your telegram correctly.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -94,6 +100,12 @@
                                             <span class="input-group-text">URL</span>
                                             <input class="form-control" id="avatarURL" type="text" name="avatarURL"
                                                 placeholder="https://example.com/photo-150x150" value="{{ profile.avatarURL }}">
+                                            <div class="invalid-feedback">
+                                                Please enter your URL to photo.
+                                            </div>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -103,6 +115,12 @@
                                     <div class="form-group">
                                         <label>About</label>
                                         <textarea class="form-control" rows="3" name="about" placeholder="My Bio">{{ profile.about }}</textarea>
+                                        <div class="invalid-feedback">
+                                            Something wrong.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
                                     </div>
                                 </div>
                             </div>
