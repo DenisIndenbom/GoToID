@@ -1,55 +1,56 @@
 {% extends base %}
 {% block content %}
-    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+<div class="col-12 col-md-8 col-lg-6 col-xl-5">
     <div class="card bg-dark text-white rb">
         <div class="card-body p-5">
-        <div class="mb-md-3 mt-md-3 pb-5">
-            <div class="text-center">
-                <h2 class="fw-bold mb-2 text-uppercase">Login On GoToID</h2>
-                <p class="text-white-50 mb-5">Please enter your username and password!</p>
-            </div>
-            <div class="password-warning" style="visibility: hidden; display: none;">
-                <div class="alert alert-warning" role="alert">Wrong username or password!</div>
-            </div>
-            <form method="post" class="needs-validation" novalidate>
-                <div class="mb-4">
-                    <label>Username</label>
-                    <div class="input-group">
-                        <span class="input-group-text">@</span>
-                        <input type="text" name="username" class="form-control" required pattern="^[a-z0-9_]{3,15}$">
+            <div class="mb-md-3 mt-md-3 pb-5">
+                <div class="text-center">
+                    <h2 class="fw-bold mb-2 text-uppercase">Login On GoToID</h2>
+                    <p class="text-white-50 mb-5">Please enter your username and password!</p>
+                </div>
+                <div class="password-warning" style="visibility: hidden; display: none;">
+                    <div class="alert alert-warning" role="alert">Wrong username or password!</div>
+                </div>
+                <form method="post" class="needs-validation" novalidate>
+                    <div class="mb-4">
+                        <label>Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text">@</span>
+                            <input type="text" name="username" class="form-control" required
+                                pattern="^[a-z0-9_]{3,15}$">
+                            <div class="invalid-feedback">
+                                Please enter your username.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label>Password</label>
+                        <input class="form-control" type="password" name="password" required />
                         <div class="invalid-feedback">
-                            Please enter your username.
+                            Please enter your password.
                         </div>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
                     </div>
-                </div>
-                <div class="mb-4">
-                    <label>Password</label>
-                    <input class="form-control" type="password" name="password" required />
-                    <div class="invalid-feedback">
-                        Please enter your password.
+                    <p class="mb-3 pb-lg-2"></p>
+                    <div class="text-center">
+                        <button class="btn btn-outline-light btn-lg px-5 center" type="submit">Login</button>
                     </div>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
-                <p class="mb-3 pb-lg-2"></p>
-                <div class="text-center">
-                    <button class="btn btn-outline-light btn-lg px-5 center" type="submit">Login</button>
-                </div>
-            </form>
-        </div>
-        <div>
-            <p class="mb-0 text-center">
-                Don't have an account? <a href="/register" class="text-white-50 fw-bold">Sign Up</a>
-            </p>
-        </div>
+                </form>
+            </div>
+            <div>
+                <p class="mb-0 text-center">
+                    Don't have an account? <a href="/register" class="text-white-50 fw-bold">Sign Up</a>
+                </p>
+            </div>
         </div>
     </div>
-    </div>
-    <script src="/static/js/error_handler.js"></script>
-    <script src="/static/js/warning_handler.js"></script>
-    <script src="/static/js/validate_form.js"></script>    
+</div>
+<script src="/static/js/error_handler.js"></script>
+<script src="/static/js/warning_handler.js"></script>
+<script src="/static/js/validate_form.js"></script>
 {% endblock %}

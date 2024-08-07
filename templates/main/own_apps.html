@@ -1,34 +1,34 @@
 {% extends base %}
 {% block content %}
 <div class="col-12 col-md-8 col-lg-6 col-xl-4" style="overflow-y: auto;">
-  <div class="card bg-dark-subtle text-white p-3 rb">
-    <div class="mb-3"></div>
-    <div class="text-center mb-4">
-      <h2 class="fw-bold mb-2 text-uppercase">own apps</h2>
-    </div>
-    {% if apps.length == 0%}
-    <p class="text-white-50 pb-3 text-center">You don't have apps!</p>
-    {% endif %}
-    {% for app in apps %}
-    <div class="card bg-dark text-white mb-3" style="border-radius: 1rem;">
-      <div class="card-body clear-fix">
-        <div class="float-start">{{ app.clientId }}</div>
-        <div class="float-end">
-          <a href="own_apps/edit/{{ app.clientId }}" class="btn btn-outline-success">edit</a>
-          <a href="own_apps/delete/{{ app.clientId }}" class="btn btn-outline-danger">delete</a>
+    <div class="card bg-dark-subtle text-white p-3 rb">
+        <div class="mb-3"></div>
+        <div class="text-center mb-4">
+            <h2 class="fw-bold mb-2 text-uppercase">own apps</h2>
         </div>
-      </div>
-      <div class="card-footer">
-        <details>
-          <summary>Token</summary>
-          <code>{{ app.clientSecret }}</code>
-        </details>
-      </div>
+        {% if apps.length == 0%}
+        <p class="text-white-50 pb-3 text-center">You don't have apps!</p>
+        {% endif %}
+        {% for app in apps %}
+        <div class="card bg-dark text-white mb-3" style="border-radius: 1rem;">
+            <div class="card-body clear-fix">
+                <div class="float-start">{{ app.clientId }}</div>
+                <div class="float-end">
+                    <a href="own_apps/edit/{{ app.clientId }}" class="btn btn-outline-success">edit</a>
+                    <a href="own_apps/delete/{{ app.clientId }}" class="btn btn-outline-danger">delete</a>
+                </div>
+            </div>
+            <div class="card-footer">
+                <details>
+                    <summary>Token</summary>
+                    <code>{{ app.clientSecret }}</code>
+                </details>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="text-center  my-1 mb-3">
+            <a href="/" class="btn btn-outline-secondary">Back</a>
+            <a href="own_apps/create" class="btn btn-outline-success">Create app</a>
+        </div>
     </div>
-    {% endfor %}
-    <div class="text-center  my-1 mb-3">
-      <a href="/" class="btn btn-outline-secondary">Back</a>
-      <a href="own_apps/create" class="btn btn-outline-success">Create app</a>
-    </div>
-  </div>
-  {% endblock %}
+    {% endblock %}

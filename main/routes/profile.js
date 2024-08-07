@@ -59,6 +59,19 @@ router.get('/my/edit', auth_handler, async function (req, res, next) {
     })
 })
 
+router.post('/my/edit', auth_handler, async function (req, res, next) {
+    const new_username = req.body.username
+    const new_firstName = req.body.firstName
+    const new_lastName = req.body.lastName
+
+    const new_email = req.body.email
+    const new_telegram = req.body.telegram
+    const new_avatarURL = req.body.avatarURL
+    const new_about = req.body.about
+
+
+})
+
 router.get('/:username', async function (req, res, next) {
     const username = req.params.username
 

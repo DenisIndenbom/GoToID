@@ -1,27 +1,27 @@
 {% extends base %}
 {% block content %}
 <div class="col-12 col-md-8 col-lg-6 col-xl-4 " style="overflow-y: auto;">
-  <div class="card bg-dark-subtle text-white p-3 rb">
-    <div class="mb-3"></div>
-    <div class="text-center mb-4">
-      <h2 class="fw-bold mb-2 text-uppercase">third-party apps</h2>
-    </div>
-    {% if apps.length == 0%}
-    <p class="text-white-50 pb-3 text-center">You don't have third-party apps!</p>
-    {% endif %}
-    {% for app in apps %}
-    <div class="card bg-dark text-white mb-3" style="border-radius: 1rem;">
-      <div class="card-body clear-fix">
-        <div class="float-start">{{ app.clientId }}</div>
-        <div class="float-end">
-          <a href="third_party_apps/revoke/{{ app.clientId }}" class="btn btn-outline-danger">revoke</a>
+    <div class="card bg-dark-subtle text-white p-3 rb">
+        <div class="mb-3"></div>
+        <div class="text-center mb-4">
+            <h2 class="fw-bold mb-2 text-uppercase">third-party apps</h2>
         </div>
-      </div>
+        {% if apps.length == 0%}
+        <p class="text-white-50 pb-3 text-center">You don't have third-party apps!</p>
+        {% endif %}
+        {% for app in apps %}
+        <div class="card bg-dark text-white mb-3" style="border-radius: 1rem;">
+            <div class="card-body clear-fix">
+                <div class="float-start">{{ app.clientId }}</div>
+                <div class="float-end">
+                    <a href="third_party_apps/revoke/{{ app.clientId }}" class="btn btn-outline-danger">revoke</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="text-center my-1 mb-3">
+            <a href="/" class="btn btn-outline-secondary">Back</a>
+        </div>
     </div>
-    {% endfor %}
-    <div class="text-center my-1 mb-3">
-      <a href="/" class="btn btn-outline-secondary">Back</a>
-    </div>
-  </div>
 </div>
 {% endblock %}

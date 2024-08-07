@@ -16,7 +16,8 @@
                         <label>App ID</label>
                         <div class="input-group">
                             <span class="input-group-text">@</span>
-                            <input type="text" name="app_id" class="form-control" value="{{ app_id }}" required pattern="^[a-z0-9_]{3,15}$" />
+                            <input type="text" name="app_id" class="form-control" value="{{ app_id }}" required
+                                pattern="^[a-z0-9_]{3,15}$" />
                             <div class="invalid-feedback">
                                 Please enter app id.
                             </div>
@@ -27,7 +28,8 @@
                     </div>
                     <div class="mb-4">
                         <label>Redirect URI</label>
-                        <input class="form-control" type="text" name="redirect_uri" value="{{ redirect_uri }}" required />
+                        <input class="form-control" type="text" name="redirect_uri" value="{{ redirect_uri }}"
+                            required />
                         <div class="invalid-feedback">
                             Please enter redirect URI.
                         </div>
