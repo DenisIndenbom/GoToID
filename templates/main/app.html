@@ -3,59 +3,59 @@
 <div class="col-12 col-md-8 col-lg-6 col-xl-5">
     <div class="card bg-dark text-white rb">
         <div class="card-body p-5">
-        <div class="mb-md-2 mt-md-2 pb-0">
-            <div class="text-center">
-                <h2 class="fw-bold mb-2 text-uppercase">{{ title }}</h2>
-                <p class="text-white-50 mb-5">Please enter app-id and redirect uri!</p>
-            </div>
-            <div class="unique-warning" style="visibility: hidden; display: none;">
-                <div class="alert alert-warning" role="alert">This app id is already registered!</div>
-            </div>
-            <form method="post" class="needs-validation" novalidate>
-                <div class="mb-4">
-                    <label>App ID</label>
-                    <div class="input-group">
-                        <span class="input-group-text">@</span>
-                        <input type="text" name="app_id" class="form-control" value="{{ app_id }}" required pattern="^[a-z0-9_]{3,15}$"/>
+            <div class="mb-md-2 mt-md-2 pb-0">
+                <div class="text-center">
+                    <h2 class="fw-bold mb-2 text-uppercase">{{ title }}</h2>
+                    <p class="text-white-50 mb-5">Please enter app-id and redirect uri!</p>
+                </div>
+                <div class="unique-warning" style="visibility: hidden; display: none;">
+                    <div class="alert alert-warning" role="alert">This app id is already registered!</div>
+                </div>
+                <form method="post" class="needs-validation" novalidate>
+                    <div class="mb-4">
+                        <label>App ID</label>
+                        <div class="input-group">
+                            <span class="input-group-text">@</span>
+                            <input type="text" name="app_id" class="form-control" value="{{ app_id }}" required pattern="^[a-z0-9_]{3,15}$" />
+                            <div class="invalid-feedback">
+                                Please enter app id.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label>Redirect URI</label>
+                        <input class="form-control" type="text" name="redirect_uri" value="{{ redirect_uri }}" required />
                         <div class="invalid-feedback">
-                            Please enter app id.
+                            Please enter redirect URI.
                         </div>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
                     </div>
-                </div>
-                <div class="mb-4">
-                    <label>Redirect URI</label>
-                    <input class="form-control" type="text" name="redirect_uri" value="{{ redirect_uri }}" required/>
-                    <div class="invalid-feedback">
-                        Please enter redirect URI.
+                    {% if edit %}
+                    <div class="btn-group mb-4" role="group">
+                        <input type="checkbox" class="btn-check" id="btncheck" name="new_token" autocomplete="off">
+                        <label class="btn btn-outline-light" for="btncheck">Regenetate token?</label>
                     </div>
-                    <div class="valid-feedback">
-                        Looks good!
+                    {% endif %}
+                    <p class="mb-3 pb-lg-2"></p>
+                    <div class="text-center">
+                        <button class="btn btn-outline-light btn-lg px-5 center" type="submit">
+                            {% if not edit %}
+                            Create
+                            {% else %}
+                            Edit
+                            {% endif %}
+                        </button>
                     </div>
-                </div>
-                {% if edit %}
-                <div class="btn-group mb-4" role="group">
-                    <input type="checkbox" class="btn-check" id="btncheck" name="new_token" autocomplete="off">
-                    <label class="btn btn-outline-light" for="btncheck">Regenetate token?</label>
-                </div>
-                {% endif %}
-                <p class="mb-3 pb-lg-2"></p>
-                <div class="text-center">
-                    <button class="btn btn-outline-light btn-lg px-5 center" type="submit">
-                        {% if not edit %}
-                        Create
-                        {% else %}
-                        Edit
-                        {% endif %}
-                    </button>
-                </div>
-            </form>
-        </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 <script src="/static/js/error_handler.js"></script>
-<script src="/static/js/validate_form.js"></script>    
+<script src="/static/js/validate_form.js"></script>
 {% endblock %}
