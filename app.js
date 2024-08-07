@@ -71,6 +71,7 @@ app.use('/login', authorizationRoutes.login)
 app.use('/change_password', authorizationRoutes.change_password)
 app.use('/logout', (req, res) => { req.session.destroy(); res.redirect('/login') })
 app.use('/profile', mainRoutes.profile)
+app.use('/', mainRoutes.apps)
 app.use('/', mainRoutes.main)
 
 
