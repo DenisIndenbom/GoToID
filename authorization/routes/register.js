@@ -1,7 +1,9 @@
 const express = require('express')
 
 const prisma = require('../../lib/prisma')
+
 const hashPassword = require('../../methods').passwordHashing.hashPassword
+const validate = require('../../methods').validate
 
 const router = express.Router() // Instantiate a new router
 
@@ -23,6 +25,9 @@ router.post('/', async (req, res) => {
     const params = `&username=${username}&firstName=${firstName}&lastName=${lastName}`
 
     if (!username || !password || !inviteCode || !firstName || !lastName)
+        return res.redirect(`/register?success=false${params}&invite_code=${inviteCode}`)
+
+    if (!validate.username(username) || !validate.password(password) || !validate.invite_code(inviteCode))
         return res.redirect(`/register?success=false${params}&invite_code=${inviteCode}`)
 
     const invite = await prisma.inviteCode.findFirst({
@@ -53,7 +58,7 @@ router.post('/', async (req, res) => {
     catch (e) {
         // handle error of not unique
         if (e.code === 'P2002') return res.redirect(`/register?success=false${params}&invite_code=${inviteCode}&unique=false`)
-        else return res.redirect(`/register?success=false`)
+        else return res.redirect(`/register?success=false${params}&invite_code=${inviteCode}`)
     }
 
     // login user

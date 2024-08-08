@@ -6,6 +6,8 @@ const router = express.Router() // Instantiate a new router
 
 const methods = require('../../methods')
 
+const validate = methods.validate
+
 function auth_handler(req, res, next) { methods.auth(req, res, next, '/login') }
 
 router.get('/my', auth_handler, async function (req, res, next) {
@@ -60,6 +62,10 @@ router.get('/my/edit', auth_handler, async function (req, res, next) {
 })
 
 router.post('/my/edit', auth_handler, async function (req, res, next) {
+    const username = req.session.username
+    const firstName = req.session.firstName
+    const lastName = req.session.lastName
+
     const new_username = req.body.username
     const new_firstName = req.body.firstName
     const new_lastName = req.body.lastName
@@ -69,7 +75,14 @@ router.post('/my/edit', auth_handler, async function (req, res, next) {
     const new_avatarURL = req.body.avatarURL
     const new_about = req.body.about
 
+    // Validate data
+    if (!validate.username(new_username) || !validate.email(new_email) || !validate.username(new_telegram) || !validate.user_about(new_about)) {
+        return res.redirect('/my/edit?success=false')
+    }
 
+    if (username !== new_username || firstName !== new_firstName || lastName !== new_lastName) {
+        // pass
+    }
 })
 
 router.get('/:username', async function (req, res, next) {
