@@ -4,6 +4,8 @@
 
     default_path = '/static/images/goto_man.jpg'
 
+    avatar.src = field.value    
+
     avatar.onerror = () => {
         avatar.src = default_path
     }

@@ -63,8 +63,8 @@ router.get('/my/edit', auth_handler, async function (req, res, next) {
 
 router.post('/my/edit', auth_handler, async function (req, res, next) {
     const username = req.session.username
-    const firstName = req.session.firstName
-    const lastName = req.session.lastName
+    const firstName = req.session.fullname.firstName
+    const lastName = req.session.fullname.lastName
 
     const new_username = req.body.username
     const new_firstName = req.body.firstName
@@ -75,14 +75,71 @@ router.post('/my/edit', auth_handler, async function (req, res, next) {
     const new_avatarURL = req.body.avatarURL
     const new_about = req.body.about
 
+    const params = `&email=${new_email}&telegram=${new_telegram}&avatarURL=${new_avatarURL}`
+
     // Validate data
-    if (!validate.username(new_username) || !validate.email(new_email) || !validate.username(new_telegram) || !validate.user_about(new_about)) {
-        return res.redirect('/my/edit?success=false')
+    if (!new_username || !new_firstName || !new_lastName) {
+        return res.redirect('/profile/my/edit')
     }
 
-    if (username !== new_username || firstName !== new_firstName || lastName !== new_lastName) {
-        // pass
+    if (!validate.username(new_username) ||
+        !(validate.email(new_email) || !new_email) ||
+        !(validate.username(new_telegram) || !new_telegram) ||
+        !(validate.user_about(new_about) || !new_about)) {
+
+        return res.redirect(`/profile/my/edit?success=false${params}`)
     }
+
+    // Check defferents
+    if (username !== new_username || firstName !== new_firstName || lastName !== new_lastName) {
+        try {
+            // Update user in db
+            await prisma.user.update({
+                where: {
+                    id: req.session.user_id
+                },
+                data: {
+                    username: new_username,
+                    firstName: new_firstName,
+                    lastName: new_lastName
+                }
+            })
+        }
+        catch (e) {
+            // redirect to the edit page if the user is a P2002
+            if (e.code === 'P2002')
+                return res.redirect(`/profile/my/edit?success=false${params}&unique=false`)
+            else
+                return res.redirect(`/profile/my/edit?success=false`)
+        }
+
+        req.session.username = new_username
+        req.session.fullname = { firstName: new_firstName, lastName: new_lastName }
+    }
+
+    try {
+        // Update profile in db
+        await prisma.profile.update({
+            where: {
+                userId: req.session.user_id
+            },
+            data: {
+                email: new_email,
+                telegram: new_telegram,
+                avatarURL: new_avatarURL,
+                about: new_about
+            }
+        })
+    }
+    catch (e) {
+        // redirect to the edit page if the user is a P2002
+        if (e.code === 'P2002')
+            return res.redirect(`/profile/my/edit?success=false${params}&unique_tg=false`)
+        else
+            return res.redirect(`/profile/my/edit?success=false`)
+    }
+
+    return res.redirect('/profile/my')
 })
 
 router.get('/:username', async function (req, res, next) {

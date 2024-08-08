@@ -5,7 +5,7 @@
         <div class="card bg-dark text-white rb">
             <div class="card-body text-center">
                 <div class="mt-3 mb-4">
-                    <img src="/static/images/goto_man.jpg" class="avatar" />
+                    <img src="{{ profile.avatarURL }}" class="avatar" onerror="this.src='/static/images/goto_man.jpg'"/>
                 </div>
                 <h4 class="mb-2">{{ fullname.firstName }} {{ fullname.lastName
                     }}</h4>

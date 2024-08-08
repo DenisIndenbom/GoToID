@@ -4,7 +4,7 @@
     <div class="col mb-3 col-xl-6">
         <div class="card bg-dark text-white rb p-2">
             <div class="card-body">
-                <form method class="needs-validation mb-3" novalidate>
+                <form method="post" class="needs-validation mb-3" novalidate>
                     <div class="row">
                         <div class="col">
                             <div class="col d-flex justify-content-center align-items-center mb-3">
@@ -13,6 +13,12 @@
                             <span class="col d-flex justify-content-center align-items-center mb-3">
                                 <h4><strong>150x150</strong></h4>
                             </span>
+                            <div class="unique-warning" style="visibility: hidden; display: none;">
+                                <div class="alert alert-warning" role="alert">The username is already registered!</div>
+                            </div>
+                            <div class="unique-tg-warning" style="visibility: hidden; display: none;">
+                                <div class="alert alert-warning" role="alert">The telegram is already registered!</div>
+                            </div>
                             <div class="row mb-2">
                                 <div class="col">
                                     <div class="form-group">
@@ -137,5 +143,7 @@
     </div>
 </div>
 <script src="/static/js/validate_form.js"></script>
+<script src="/static/js/error_handler.js"></script>
+<script src="/static/js/warning_handler.js"></script>
 <script src="/static/js/avatar_preview.js"></script>
 {% endblock %}
