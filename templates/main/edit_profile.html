@@ -120,9 +120,10 @@
                                 <div class="col mb-3">
                                     <div class="form-group">
                                         <label>About</label>
-                                        <textarea class="form-control" rows="3" name="about" placeholder="My Bio">{{ profile.about }}</textarea>
+                                        <input class="form-control" type="text" name="about" placeholder="25 symbols about me"
+                                            value="{{ profile.about }}" pattern="^.{0,25}$">
                                         <div class="invalid-feedback">
-                                            Something wrong.
+                                            Symbols are over. 25 is maximum!
                                         </div>
                                         <div class="valid-feedback">
                                             Looks good!

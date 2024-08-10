@@ -21,6 +21,9 @@ router.post('/', async (req, res) => {
     const user = await prisma.user.findFirst({
         where: {
             username: username
+        },
+        include: {
+            Profile: true
         }
     })
 
@@ -34,6 +37,7 @@ router.post('/', async (req, res) => {
     req.session.username = user.username
     req.session.fullname = { firstName: user.firstName, lastName: user.lastName }
     req.session.user_type = user.type
+    req.session.avatar_url = user.Profile ? user.Profile.avatarURL : null
 
     return res.redirect('/')
 })

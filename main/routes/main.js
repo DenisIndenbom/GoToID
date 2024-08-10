@@ -10,6 +10,7 @@ router.get('/', async function (req, res, next) {
         base: 'base.html',
         title: 'Main',
         username: (req.session && req.session.username) ? req.session.username : 'gotoman',
+        avatarURL: req.session ? req.session.avatar_url : null,
         is_auth: (req.session && req.session.username)
     })
 })

@@ -139,6 +139,8 @@ router.post('/my/edit', auth_handler, async function (req, res, next) {
             return res.redirect(`/profile/my/edit?success=false`)
     }
 
+    req.session.avatar_url = new_avatarURL
+
     return res.redirect('/profile/my')
 })
 
