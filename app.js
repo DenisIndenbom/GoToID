@@ -26,7 +26,6 @@ const oauth = require('./oauth')
 const authorization = require('./authorization')
 const main = require('./main')
 
-const oauthServer = oauth.oauthServer
 const authRoutes = oauth.routes
 const authorizationRoutes = authorization.routes
 const mainRoutes = main.routes
@@ -65,7 +64,7 @@ app.use('/static', express.static(__dirname + '/static'))
 
 // add cors to all routes
 app.use('/oauth', authRoutes.auth)
-app.use('/api', oauthServer.authenticate(), authRoutes.api)
+app.use('/api', authRoutes.api)
 app.use('/register', authorizationRoutes.register)
 app.use('/login', authorizationRoutes.login)
 app.use('/change_password', authorizationRoutes.change_password)

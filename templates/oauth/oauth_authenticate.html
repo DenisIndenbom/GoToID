@@ -17,6 +17,7 @@
                     <input class="form-control" name="response_type" type="hidden" />
                     <input class="form-control" name="grant_type" type="hidden" />
                     <input class="form-control" name="state" type="hidden" />
+                    <input class="form-control" name="scope" type="hidden" />
 
                     <div class="mb-3">
                         <label>Username</label>
@@ -66,6 +67,7 @@
             "response_type",
             "grant_type",
             "state",
+            "scope",
         ].forEach((type) => {
             const input = document.body.querySelector(`input[name=${type}]`);
             const value = urlParams.get(type);

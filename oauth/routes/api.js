@@ -1,16 +1,17 @@
 const express = require('express')
 const prisma = require('../../lib/prisma')
 
+const oauth = require('../oauth/server')
+
 const router = express.Router() // Instantiate a new router
 
 function get_token(req) {
-    // Finds and responds with the user corresponding to the access token that was used to make the request
     return req.headers.authorization.split(' ')[1]
 }
 
-router.get('/', (req, res) => res.status(200).json({ success: true }))
+router.get('/', oauth.authenticate(), (req, res) => res.status(200).json({ success: true }))
 
-router.get('/user', async (req, res) => {
+router.get('/user', oauth.authenticate({ scope: 'user' }), async (req, res) => {
     let accessToken = get_token(req)
 
     const user = (await prisma.token.findFirst({
@@ -32,7 +33,7 @@ router.get('/user', async (req, res) => {
     })
 })
 
-router.get('/email', async (req, res) => {
+router.get('/email', oauth.authenticate({ scope: 'email' }), async (req, res) => {
     let accessToken = get_token(req)
 
     const email = (await prisma.token.findFirst({
@@ -55,7 +56,7 @@ router.get('/email', async (req, res) => {
     return res.status(200).json({ email: email })
 })
 
-router.get('/telegram', async (req, res) => {
+router.get('/telegram', oauth.authenticate({ scope: 'telegram' }), async (req, res) => {
     let accessToken = get_token(req)
 
     const telegram = (await prisma.token.findFirst({
@@ -78,7 +79,7 @@ router.get('/telegram', async (req, res) => {
     return res.status(200).json({ telegram: telegram })
 })
 
-router.get('/avatar', async (req, res) => {
+router.get('/avatar', oauth.authenticate({ scope: 'avatar' }), async (req, res) => {
     let accessToken = get_token(req)
 
     const avatar = (await prisma.token.findFirst({
@@ -101,6 +102,6 @@ router.get('/avatar', async (req, res) => {
     return res.status(200).json({ avatar: avatar })
 })
 
-router.get('*', (req, res) => res.status(404).json({ success: false, description: 'Not found!' }))
+router.get('*', oauth.authenticate(), (req, res) => res.status(404).json({ success: false, description: 'Not found!' }))
 
 module.exports = router

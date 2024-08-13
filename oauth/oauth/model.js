@@ -2,17 +2,29 @@
 const crypto = require('crypto')
 const prisma = require('../../lib/prisma')
 
+const VALID_SCOPES = ['user', 'email', 'telegram', 'avatar']
+
 module.exports = {
     getClient: async function (clientId, clientSecret) {
         // query db for details with client
-        return prisma.client.findFirst(
-            {
-                where: {
-                    clientId: clientId,
-                    // clientSecret: clientSecret,
+        if (clientId)
+            return prisma.client.findFirst(
+                {
+                    where: {
+                        clientId: clientId,
+                    }
                 }
-            }
-        )
+            )
+        else if (clientSecret)
+            return prisma.client.findFirst(
+                {
+                    where: {
+                        clientSecret: clientSecret,
+                    }
+                }
+            )
+        else
+            return null
     },
     saveToken: async (token, client, user) => {
         /* This is where you insert the token into the database */
@@ -22,16 +34,18 @@ module.exports = {
                 accessTokenExpiresAt: token.accessTokenExpiresAt,
                 refreshToken: token.accessToken, // NOTE this is only needed if you need refresh tokens down the line
                 refreshTokenExpiresAt: token.accessTokenExpiresAt,
+                scope: token.scope,
                 clientId: client.clientId,
-                userId: user.user,
+                userId: user.id,
             }
         })
 
-        return new Promise(resolve => resolve({ ...savedToken, client, user }))
+        return { ...savedToken, client, user }
     },
     getAccessToken: async accessToken => {
         /* This is where you select the token from the database where the code matches */
         if (!accessToken || accessToken === 'undefined') return false
+
         const foundAccessToken = await prisma.token.findFirst({
             where: {
                 accessToken: accessToken
@@ -41,16 +55,13 @@ module.exports = {
                 accessTokenExpiresAt: true,
                 refreshToken: true,
                 refreshTokenExpiresAt: true,
+                scope: true,
                 client: true,
                 user: true
             }
         })
 
-        const res = foundAccessToken
-        res["client"]["id"] = foundAccessToken.clientId
-        res["user"] = { user: foundAccessToken.user.id }
-
-        return new Promise(resolve => resolve(foundAccessToken))
+        return foundAccessToken
 
     },
     getRefreshToken: async token => {
@@ -70,43 +81,38 @@ module.exports = {
             }
         })
 
-        const res = foundRefreshToken
-        res["client"]["id"] = foundRefreshToken.clientId
-        res["user"] = { user: foundRefreshToken.user.id }
-
-        return new Promise(resolve => resolve(foundRefreshToken))
+        return foundRefreshToken
     },
-    revokeToken: token => {
-        // TODO: Implement this
+    revokeToken: async token => {
         /* Delete the token from the database */
 
         if (!token || token === 'undefined') return new Promise(resolve => resolve(false))
 
-        return prisma.token.delete({ where: { refreshToken: token.refreshToken } })
-            .then(function (token) {
-                return !!token;
-            });
+        return !!(await prisma.token.delete({ where: { refreshToken: token.refreshToken } }))
     },
     generateAuthorizationCode: (client, user, scope, callback) => {
         /* generate authroization code */
 
-        const err = null;
+        const err = null
         const seed = crypto.randomBytes(256)
         const code = crypto
             .createHash('sha1')
             .update(seed)
             .digest('hex')
-        return callback(err, code);
+
+        return callback(err, code)
     },
     saveAuthorizationCode: async (code, client, user) => {
         /* This is where you store the access code data into the database */
 
-        return prisma.authCode.create({
+        return await prisma.authCode.create({
             data: {
                 authorizationCode: code.authorizationCode,
                 expiresAt: code.expiresAt,
+                redirectUri: code.redirectUri,
+                scope: code.scope,
                 clientId: client.clientId,
-                userId: user.user,
+                userId: user.id,
                 redirectUri: code.redirectUri
             }
         })
@@ -121,31 +127,37 @@ module.exports = {
             select: {
                 authorizationCode: true,
                 expiresAt: true,
-                // redirectUri: true,
+                scope: true,
                 clientId: true,
                 client: true,
                 user: true
             }
         })
 
-        const res = authCode
-        res["client"]["redirectUri"] = [authCode.client.redirectUris]
-        res["user"] = { user: authCode.user.id }
-
-        return new Promise(resolve => resolve(res))
+        return authCode
     },
     revokeAuthorizationCode: async code => {
         /* This is where we delete codes */
 
-        return prisma.authCode.delete({ where: { authorizationCode: code.authorizationCode } })
-            .then(function (authorizationCode) {
-                return !!authorizationCode;
-            });
+        return !!(await prisma.authCode.delete({ where: { authorizationCode: code.authorizationCode } }))
+    },
+    validateScope: (user, client, scope) => {
+        if (scope === '') return 'user'
+
+        return scope
+            .split(' ')
+            .filter(s => VALID_SCOPES.indexOf(s) >= 0)
+            .join(' ')
     },
     verifyScope: (token, scope) => {
         /* This is where we check to make sure the client has access to this scope */
 
-        const userHasAccess = true  // return true if this user / client combo has access to this resource
-        return new Promise(resolve => resolve(userHasAccess))
+        if (!token.scope)
+            return false
+
+        let requestedScopes = scope.split(' ')
+        let authorizedScopes = token.scope.split(' ')
+
+        return requestedScopes.every(s => authorizedScopes.indexOf(s) >= 0)
     }
 }

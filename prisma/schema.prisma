@@ -42,16 +42,6 @@ model InviteCode {
   expiresAt    DateTime
 }
 
-model AuthCode {
-  authorizationCode String   @unique
-  expiresAt         DateTime
-  redirectUri       String
-  client            Client   @relation(fields: [clientId], references: [clientId])
-  user              User     @relation(fields: [userId], references: [id])
-  clientId          String
-  userId            Int
-}
-
 model Client {
   clientId     String     @id
   clientSecret String
@@ -62,11 +52,23 @@ model Client {
   userId       Int
 }
 
+model AuthCode {
+  authorizationCode String   @unique
+  expiresAt         DateTime
+  redirectUri       String
+  scope             String   @default("")
+  client            Client   @relation(fields: [clientId], references: [clientId])
+  user              User     @relation(fields: [userId], references: [id])
+  clientId          String
+  userId            Int
+}
+
 model Token {
   accessToken           String   @unique
   accessTokenExpiresAt  DateTime
   refreshToken          String   @unique
   refreshTokenExpiresAt DateTime
+  scope                 String   @default("")
   client                Client   @relation(fields: [clientId], references: [clientId])
   user                  User     @relation(fields: [userId], references: [id])
   clientId              String

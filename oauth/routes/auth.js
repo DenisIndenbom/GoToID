@@ -24,6 +24,7 @@ router.post('/authorize', async (req, res, next) => {
         'response_type',
         'grant_type',
         'state',
+        'scope',
     ]
         .map(a => `${a}=${req.body[a]}`)
         .join('&')
@@ -41,7 +42,7 @@ router.post('/authorize', async (req, res, next) => {
     const correct_password = user ? await comparePassword(password, user.password) : false
 
     if (user && correct_password) {
-        req.body.user = { user: user.id }
+        // req.body.user = { user: user.id }
         return next()
     }
 
@@ -49,7 +50,7 @@ router.post('/authorize', async (req, res, next) => {
 }, oauthServer.authorize({
     authenticateHandler: {
         handle: req => {
-            return req.body.user
+            return { id: req.session.user_id } //req.body.user
         }
     }
 }))
