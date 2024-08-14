@@ -6,7 +6,7 @@ GoToID is an authorization server designed specifically for the GoToCamp communi
 ## Setup authorization for your app
 GoToID supports the standard OAuth 2.0 API <br>
 You can create an application on the [GoToID website]() <br>
-Code example: [test-goto-app](https://github.com/DenisIndenbom/gotoid-client-example)
+Code example: [gotoid-client-example](https://github.com/DenisIndenbom/gotoid-client-example)
 
 ## OAuth 2.0 API
 ### Authorization URI
@@ -74,11 +74,15 @@ GET /api/
 {
     "success": true
 }
+
 ```
 ### **User Info**
 ```js
 GET /api/user
 ```
+
+**Scope**: `user`
+
 **Returned parameters**
 ```json
 {
@@ -88,6 +92,48 @@ GET /api/user
     "last_name": "last name",
     "type": "student", 
     "createdAt": "2023-12-02 00:00:00"
+}
+```
+
+### **User email**
+```js
+GET /api/email
+```
+
+**Scope**: `email`
+
+**Returned parameters**
+```json
+{
+    "email": "mail@example.com"
+}
+```
+
+### **User telegram**
+```js
+GET /api/telegram
+```
+
+**Scope**: `telegram`
+
+**Returned parameters**
+```json
+{
+    "telegram": "telegram_user"
+}
+```
+
+### **User avatar**
+```js
+GET /api/avatar
+```
+
+**Scope**: `avatar`
+
+**Returned parameters**
+```json
+{
+    "avatar": "https://example.com/photo-150x150"
 }
 ```
 

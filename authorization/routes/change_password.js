@@ -24,6 +24,7 @@ router.post('/', auth_handler('/login'), async (req, res) => {
 
     // Redirect to change_password if old_password or new_password is not set
     if (!old_password || !new_password) return res.redirect(`/change_password?success=false`)
+    if (!methods.validate.password(new_password)) return res.redirect(`/change_password?success=false&bad_password=true`)
 
     // Find user
     const user = await prisma.user.findFirst({

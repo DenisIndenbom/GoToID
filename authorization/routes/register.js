@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
     if (!username || !password || !inviteCode || !firstName || !lastName)
         return res.redirect(`/register?success=false${params}&invite_code=${inviteCode}`)
 
-    if (!validate.username(username) || !validate.password(password) || !validate.invite_code(inviteCode))
+    if (!validate.username(username) || !validate.password(password) || !validate.invite_code(inviteCode) || !validate.name(firstName) || !validate.name(lastName))
         return res.redirect(`/register?success=false${params}&invite_code=${inviteCode}`)
 
     const invite = await prisma.inviteCode.findFirst({

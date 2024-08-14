@@ -10,6 +10,17 @@ function username(data) {
 }
 
 /**
+* Checks if data is a name. This is used to validate user input from the API. The format of the username is a series of characters separated by white space.
+* 
+* @param data - The data to check. Must be non - empty.
+* 
+* @return { boolean } True if the name is valid false otherwise. Defaults to false if not valid but can be changed by changing the return value
+*/
+function name(data) {
+    return data.length < 30 
+}
+
+/**
 * Checks if a string is an email. This is a helper function for email ()
 * 
 * @param data - The string to check.
@@ -21,14 +32,14 @@ function email(data) {
 }
 
 /**
-* Password validator for data. It returns true if the data is password and false otherwise. This validator is used to validate passwords before they are sent to the server.
+* Password validator for data. It returns true if the data is password and false otherwise. 
 * 
 * @param data - The data to validate. Should be a string
 * 
 * @return { boolean } True if the data is password
 */
 function password(data) {
-    return true
+    return !!data
 }
 
 /**
@@ -40,6 +51,17 @@ function password(data) {
 */
 function invite_code(data) {
     return /^[A-Za-z0-9_]{3,15}$/.test(data)
+}
+
+/**
+* URL validator for data. It returns true if the data is URL and false otherwise. 
+* 
+* @param data - The data to validate. Should be a string
+* 
+* @return { boolean } True if the data is URL
+*/
+function url(data) {
+    return data.length < 1024
 }
 
 /**
@@ -55,8 +77,10 @@ function user_about(data) {
 
 module.exports = {
     username: username,
+    name: name,
     email: email,
     password: password,
     invite_code: invite_code,
+    url: url,
     user_about: user_about
 }

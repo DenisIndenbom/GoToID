@@ -81,10 +81,11 @@ router.post('/my/edit', auth_handler('/login'), async function (req, res, next) 
         return res.redirect('/profile/my/edit')
     }
 
-    if (!validate.username(new_username) ||
+    if (!validate.username(new_username) || !validate.name(new_lastName) || !validate.name(new_firstName) ||
         !(validate.email(new_email) || !new_email) ||
         !(validate.username(new_telegram) || !new_telegram) ||
-        !(validate.user_about(new_about) || !new_about)) {
+        !(validate.user_about(new_about) || !new_about) ||
+        !(validate.url(new_avatarURL) || !new_avatarURL)) {
 
         return res.redirect(`/profile/my/edit?success=false${params}`)
     }
