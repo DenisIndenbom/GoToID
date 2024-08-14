@@ -53,7 +53,7 @@ app.use(session({
     secret: secret,
     resave: true,
     saveUninitialized: false,
-    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 }, // session is stored for 7 days
+    cookie: { maxAge: 14 * 24 * 60 * 60 * 1000 }, // session is stored for 14 days
     store: new PostgreSqlStore({ conString: databaseURL })
 }))
 
@@ -91,7 +91,6 @@ app.use(function (req, res, next) {
 
 // Launch telegram bot
 require('./lib/telegram_bot.js')
-
 
 // Run app
 module.exports = (is_main) => {

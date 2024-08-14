@@ -6,11 +6,10 @@ const router = express.Router() // Instantiate a new router
 
 const methods = require('../../methods')
 
+const auth_handler = methods.auth
 const validate = methods.validate
 
-function auth_handler(req, res, next) { methods.auth(req, res, next, '/login') }
-
-router.get('/my', auth_handler, async function (req, res, next) {
+router.get('/my', auth_handler('/login'), async function (req, res, next) {
     profile = await prisma.profile.findFirst({
         where: {
             userId: req.session.user_id
@@ -36,7 +35,7 @@ router.get('/my', auth_handler, async function (req, res, next) {
     })
 })
 
-router.get('/my/edit', auth_handler, async function (req, res, next) {
+router.get('/my/edit', auth_handler('/login'), async function (req, res, next) {
     profile = await prisma.profile.findFirst({
         where: {
             userId: req.session.user_id
@@ -61,7 +60,7 @@ router.get('/my/edit', auth_handler, async function (req, res, next) {
     })
 })
 
-router.post('/my/edit', auth_handler, async function (req, res, next) {
+router.post('/my/edit', auth_handler('/login'), async function (req, res, next) {
     const username = req.session.username
     const firstName = req.session.fullname.firstName
     const lastName = req.session.fullname.lastName

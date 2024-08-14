@@ -9,22 +9,22 @@ const router = express.Router() // Instantiate a new router
 
 const methods = require('../../methods')
 
-function auth_handler(req, res, next) { methods.auth(req, res, next, '/login') }
+const auth_handler = methods.auth
 
-router.get('/', auth_handler, async (req, res) => {
+router.get('/', auth_handler('/login'), async (req, res) => {
     return res.render('authorization/change_password.html', {
         base: 'base.html',
         title: 'Change Password',
     })
 })
 
-router.post('/', auth_handler, async (req, res) => {
+router.post('/', auth_handler('/login'), async (req, res) => {
     const old_password = req.body.old_password
     const new_password = req.body.new_password
 
     // Redirect to change_password if old_password or new_password is not set
     if (!old_password || !new_password) return res.redirect(`/change_password?success=false`)
-    
+
     // Find user
     const user = await prisma.user.findFirst({
         where: {

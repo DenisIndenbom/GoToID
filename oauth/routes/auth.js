@@ -2,22 +2,20 @@ const express = require('express')
 const oauthServer = require('../oauth/server.js')
 
 const prisma = require('../../lib/prisma')
-const comparePassword = require('../../methods').passwordHashing.comparePassword
+const auth_handler = require('../../methods/is_auth.js')
 
 const router = express.Router() // Instantiate a new router
 
-router.get('/', (req, res) => {  // send back a simple form for the oauth
+router.get('/', auth_handler('/login'), (req, res) => {  // send back a simple form for the oauth
     res.render('oauth/oauth_authenticate.html', {
         base: 'base.html',
-        title: 'OAuth',
+        title: 'OAuth GoToID',
+        is_auth: (req.session && req.session.username),
         username: (req.session && req.session.username) ? req.session.username : ''
     })
 })
 
-router.post('/authorize', async (req, res, next) => {
-    const username = req.body.username
-    const password = req.body.password
-
+router.post('/authorize', auth_handler('/login'), async (req, res, next) => {
     const params = [ // Send params back down
         'client_id',
         'redirect_uri',
@@ -29,24 +27,9 @@ router.post('/authorize', async (req, res, next) => {
         .map(a => `${a}=${req.body[a]}`)
         .join('&')
 
-    if (!username || !password) {
-        return res.redirect(`/oauth?success=false&${params}`)
-    }
+    if (req.body.agree === 'on') return next()
 
-    const user = await prisma.user.findFirst({
-        where: {
-            username: username
-        }
-    })
-
-    const correct_password = user ? await comparePassword(password, user.password) : false
-
-    if (user && correct_password) {
-        // req.body.user = { user: user.id }
-        return next()
-    }
-
-    return res.redirect(`/oauth?success=false&${params}&wrong_password=true`)
+    return res.redirect(`/oauth?success=false&${params}`)
 }, oauthServer.authorize({
     authenticateHandler: {
         handle: req => {
@@ -61,13 +44,12 @@ router.post('/token', async (req, res, next) => {
     const clientId = req.body.client_id
     const clientSecret = req.body.client_secret
 
-    const client = await prisma.client.findFirst(
-        {
-            where: {
-                clientId: clientId,
-                clientSecret: clientSecret,
-            }
+    const client = await prisma.client.findFirst({
+        where: {
+            clientId: clientId,
+            clientSecret: clientSecret,
         }
+    }
     )
 
     // Check client exists

@@ -7,12 +7,10 @@ const randToken = require('rand-token').generator({
 
 const router = express.Router() // Instantiate a new router
 
-const methods = require('../../methods')
-
-function auth_handler(req, res, next) { methods.auth(req, res, next, '/login') }
+const auth_handler = require('../../methods').auth
 
 // Third party apps pages
-router.get('/third_party_apps', auth_handler, async function (req, res, next) {
+router.get('/third_party_apps', auth_handler('/login'), async function (req, res, next) {
     const clients = await prisma.token.findMany({
         where: {
             userId: req.session.user_id,
@@ -33,7 +31,7 @@ router.get('/third_party_apps', auth_handler, async function (req, res, next) {
 })
 
 // Revoke access
-router.get('/third_party_apps/revoke/:clientId', auth_handler, async function (req, res, next) {
+router.get('/third_party_apps/revoke/:clientId', auth_handler('/login'), async function (req, res, next) {
     const clientId = req.params.clientId
 
     // Validate data
@@ -53,7 +51,7 @@ router.get('/third_party_apps/revoke/:clientId', auth_handler, async function (r
 })
 
 // Own apps page
-router.get('/own_apps', auth_handler, async function (req, res, next) {
+router.get('/own_apps', auth_handler('/login'), async function (req, res, next) {
     const clients = await prisma.client.findMany({
         where: {
             userId: req.session.user_id
@@ -73,7 +71,7 @@ router.get('/own_apps', auth_handler, async function (req, res, next) {
 })
 
 // Create app
-router.get('/own_apps/create', auth_handler, async function (req, res, next) {
+router.get('/own_apps/create', auth_handler('/login'), async function (req, res, next) {
     return res.render('main/app.html', {
         base: 'base.html',
         title: 'Create App',
@@ -81,7 +79,7 @@ router.get('/own_apps/create', auth_handler, async function (req, res, next) {
     })
 })
 
-router.post('/own_apps/create', auth_handler, async function (req, res, next) {
+router.post('/own_apps/create', auth_handler('/login'), async function (req, res, next) {
     const clientId = req.body.app_id
     const redirectURI = req.body.redirect_uri
 
@@ -112,7 +110,7 @@ router.post('/own_apps/create', auth_handler, async function (req, res, next) {
 })
 
 // Edit app
-router.get('/own_apps/edit/:clientId', auth_handler, async function (req, res, next) {
+router.get('/own_apps/edit/:clientId', auth_handler('/login'), async function (req, res, next) {
     const clientId = req.params.clientId
 
     // Validate data
@@ -140,7 +138,7 @@ router.get('/own_apps/edit/:clientId', auth_handler, async function (req, res, n
     })
 })
 
-router.post('/own_apps/edit/:clientId', auth_handler, async function (req, res, next) {
+router.post('/own_apps/edit/:clientId', auth_handler('/login'), async function (req, res, next) {
     const clientId = req.params.clientId
     const newClientId = req.body.app_id
     const redirectURI = req.body.redirect_uri
@@ -190,7 +188,7 @@ router.post('/own_apps/edit/:clientId', auth_handler, async function (req, res, 
 })
 
 // Delete app
-router.get('/own_apps/delete/:clientId', auth_handler, async function (req, res, next) {
+router.get('/own_apps/delete/:clientId', auth_handler('/login'), async function (req, res, next) {
     const clientId = req.params.clientId
 
     // redirect to own_apps if param is null
