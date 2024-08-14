@@ -17,19 +17,7 @@
                     <input class="form-control" name="scope" type="hidden" />
                     <div class="mb-3 px-5 pb-3">
                         <h5 class="text-center fw-bold mb-2">You give the application access to:</h5>
-                        <ul class="list-group mb-3">
-                            <li class="list-group-item">
-                                <input class="form-check-input me-1" type="checkbox" checked onclick="return false;">
-                                <label class="form-check-label" for="firstCheckbox">User</label>
-                            </li>
-                            <li class="list-group-item">
-                                <input class="form-check-input me-1" type="checkbox" checked onclick="return false;">
-                                <label class="form-check-label" for="secondCheckbox">Email</label>
-                            </li>
-                            <li class="list-group-item">
-                                <input class="form-check-input me-1" type="checkbox" checked onclick="return false;">
-                                <label class="form-check-label" for="thirdCheckbox">Telegram</label>
-                            </li>
+                        <ul class="list-group mb-3" id="scope-list">
                         </ul>
                         <div class="mb-3">
                             <input type="checkbox" class="btn-check" id="btncheck" name="agree" autocomplete="off" required>
