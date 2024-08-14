@@ -5,7 +5,7 @@
         <div class="card-body p-5">
             <div class="mb-md-3 mt-md-3 pb-5">
                 <div class="text-center mb-4">
-                    <h2 class="fw-bold mb-2 text-uppercase">OAuth GoToID</h2>
+                    <h2 class="fw-bold mb-2 text-uppercase">{% if client_id %}{{client_id}}{% else %}GoToID{% endif %}</h2>
                     <p class="text-white-50">Please confirm your login in a third-party app!</p>
                 </div>
                 <form action="/oauth/authorize" method="post" class="needs-validation" novalidate>

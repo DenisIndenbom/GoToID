@@ -10,8 +10,7 @@ router.get('/', auth_handler('/login'), (req, res) => {  // send back a simple f
     res.render('oauth/oauth_authenticate.html', {
         base: 'base.html',
         title: 'OAuth GoToID',
-        is_auth: (req.session && req.session.username),
-        username: (req.session && req.session.username) ? req.session.username : ''
+        client_id: req.query.client_id
     })
 })
 

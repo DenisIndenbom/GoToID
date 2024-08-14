@@ -15,8 +15,6 @@
 })();
 
 (function () {
-    template = ""
-
     const scope = new URLSearchParams(decodeURIComponent(window.location.search)).get('scope');
     const scope_list = document.getElementById('scope-list');
 

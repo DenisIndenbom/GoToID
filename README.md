@@ -13,6 +13,13 @@ Code example: [gotoid-client-example](https://github.com/DenisIndenbom/gotoid-cl
 ```
 Authorization URI: /oauth?response_type=code&client_id=<client id>&redirect_uri=<redirect uri>
 ```
+
+### Possible _scopes_
+- `user`
+- `email`
+- `telegram`
+- `avatar`
+
 ### Access Token
 ```js
 POST /oauth/token
