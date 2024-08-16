@@ -26,12 +26,13 @@
         const input_item = document.createElement('input');
         const label_item = document.createElement('label');
 
-        li_item.classList.add('list-group-item');
+        li_item.setAttribute('class', 'list-group-item');
 
         input_item.setAttribute('class', 'form-check-input me-2');
         input_item.setAttribute('id', element);
         input_item.setAttribute('type', 'checkbox');
         input_item.setAttribute('checked', null);
+
         label_item.setAttribute('class', 'form-check-label');
         label_item.setAttribute('for', element);
 
