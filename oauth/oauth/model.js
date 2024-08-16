@@ -142,8 +142,6 @@ module.exports = {
         return !!(await prisma.authCode.delete({ where: { authorizationCode: code.authorizationCode } }))
     },
     validateScope: (user, client, scope) => {
-        if (scope === '') return 'user'
-
         return scope
             .split(' ')
             .filter(s => VALID_SCOPES.indexOf(s) >= 0)

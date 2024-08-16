@@ -15,8 +15,11 @@
 })();
 
 (function () {
-    const scope = new URLSearchParams(decodeURIComponent(window.location.search)).get('scope');
+    let scope = new URLSearchParams(decodeURIComponent(window.location.search)).get('scope');
+
     const scope_list = document.getElementById('scope-list');
+
+    if (!scope) scope = 'nothing';
 
     scope.split(' ').forEach(element => {
         const li_item = document.createElement('li');
@@ -32,7 +35,7 @@
         label_item.setAttribute('class', 'form-check-label');
         label_item.setAttribute('for', element);
 
-        input_item.onclick = () => {return false;}
+        input_item.onclick = () => { return false; }
         label_item.textContent = element;
 
         li_item.appendChild(input_item);
