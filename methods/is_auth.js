@@ -13,19 +13,8 @@ const prisma = require('../lib/prisma')
 function auth(redirect_url = '') {
     return async function (req, res, next) {
         // If the user is logged in redirect to the next page.
-        if (req.session && req.session.user_id) {
-            const user = await prisma.user.findFirst({
-                where: {
-                    id: req.session.user_id
-                }
-            })
-
-            // If user is not logged in redirect to the next page.
-            if (user) return next()
-            else return redirect_url ? res.redirect(redirect_url) : res.sendStatus(401)
-        }
-        else
-            return redirect_url ? res.redirect(redirect_url) : res.sendStatus(401)
+        if (req.session && req.session.user_id) next()
+        else return redirect_url ? res.redirect(redirect_url) : res.sendStatus(401)
     }
 }
 
