@@ -9,7 +9,7 @@ const methods = require('../../methods')
 const auth_handler = methods.auth
 const validate = methods.validate
 
-router.get('/my', auth_handler('/login'), async function (req, res, next) {
+router.get('/my', auth_handler('/login', true), async function (req, res, next) {
     profile = await prisma.profile.findFirst({
         where: {
             userId: req.session.user_id
@@ -35,7 +35,7 @@ router.get('/my', auth_handler('/login'), async function (req, res, next) {
     })
 })
 
-router.get('/my/edit', auth_handler('/login'), async function (req, res, next) {
+router.get('/my/edit', auth_handler('/login', true), async function (req, res, next) {
     profile = await prisma.profile.findFirst({
         where: {
             userId: req.session.user_id
@@ -74,7 +74,7 @@ router.post('/my/edit', auth_handler('/login'), async function (req, res, next) 
     const new_avatarURL = req.body.avatarURL
     const new_about = req.body.about
 
-    const params = `&email=${new_email}&telegram=${new_telegram}&avatarURL=${new_avatarURL}`
+    const params = `&email=${new_email}&telegram=${new_telegram}&avatarURL=${encodeURIComponent(new_avatarURL)}`
 
     // Validate data
     if (!new_username || !new_firstName || !new_lastName) {

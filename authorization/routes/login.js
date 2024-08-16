@@ -16,7 +16,9 @@ router.post('/', async (req, res) => {
     const username = req.body.username
     const password = req.body.password
 
-    if (!username || !password) return res.redirect(`/login?success=false`)
+    const back = req.query.back
+
+    if (!username || !password) return res.redirect(`/login?success=false` + (back ? `&back=${back}` : ''))
 
     const user = await prisma.user.findFirst({
         where: {
@@ -29,8 +31,8 @@ router.post('/', async (req, res) => {
 
     const correct_password = user ? await comparePassword(password, user.password) : false
 
-    if (!user || !correct_password)
-        return res.redirect(`/login?success=false&username=${username}${!correct_password ? '&wrong_password=true' : ''}`)
+    if (!correct_password)
+        return res.redirect(`/login?success=false&username=${username}${(back ? `&back=${back}` : '')}&wrong_password=true`)
 
     // login user
     req.session.user_id = user.id
@@ -39,7 +41,7 @@ router.post('/', async (req, res) => {
     req.session.user_type = user.type
     req.session.avatar_url = user.Profile ? user.Profile.avatarURL : null
 
-    return res.redirect('/')
+    return res.redirect(back ? decodeURIComponent(back) : '/')
 })
 
 

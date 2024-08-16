@@ -11,7 +11,7 @@ const methods = require('../../methods')
 
 const auth_handler = methods.auth
 
-router.get('/', auth_handler('/login'), async (req, res) => {
+router.get('/', auth_handler('/login', true), async (req, res) => {
     return res.render('authorization/change_password.html', {
         base: 'base.html',
         title: 'Change Password',

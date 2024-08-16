@@ -21,8 +21,10 @@ router.post('/', async (req, res) => {
     const password = req.body.password
     const inviteCode = req.body.invite_code
 
+    const back = req.query.back
+
     // save url params
-    const params = `&username=${username}&firstName=${firstName}&lastName=${lastName}`
+    const params = `&username=${username}&firstName=${firstName}&lastName=${lastName}` + (back ? `&back=${back}` : '')
 
     if (!username || !password || !inviteCode || !firstName || !lastName)
         return res.redirect(`/register?success=false${params}&invite_code=${inviteCode}`)
@@ -67,7 +69,7 @@ router.post('/', async (req, res) => {
     req.session.fullname = { firstName: firstName, lastName: lastName }
     req.session.user_type = user.type
 
-    return res.redirect('/')
+    return res.redirect(back ? decodeURIComponent(back) : '/')
 })
 
 

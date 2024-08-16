@@ -6,7 +6,7 @@ const auth_handler = require('../../methods/is_auth.js')
 
 const router = express.Router() // Instantiate a new router
 
-router.get('/', auth_handler('/login'), (req, res) => {  // send back a simple form for the oauth
+router.get('/', auth_handler('/login', true), (req, res) => {  // send back a simple form for the oauth
     res.render('oauth/oauth_authenticate.html', {
         base: 'base.html',
         title: 'OAuth GoToID',
