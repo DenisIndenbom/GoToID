@@ -1,49 +1,41 @@
-// See https://oauth2-server.readthedocs.io/en/latest/model/spec.html for what you can do with this
 const crypto = require('crypto');
 const prisma = require('../../lib/prisma');
 
 const VALID_SCOPES = ['user', 'email', 'telegram', 'avatar'];
 
 module.exports = {
-	getClient: async (clientId, clientSecret) => {
-		// query db for details with client
-		if (clientId)
-			return prisma.client.findFirst({
-				where: {
-					clientId: clientId,
-				},
-			});
-		else if (clientSecret)
-			return prisma.client.findFirst({
-				where: {
-					clientSecret: clientSecret,
-				},
-			});
-		else return null;
+	getClient: async (client_id, client_secret) => {
+		// Query db for details with client
+
+		return await prisma.client.findFirst({
+			where: client_id ? { clientId: client_id } : { clientSecret: client_secret },
+		});
 	},
 	saveToken: async (token, client, user) => {
 		/* This is where you insert the token into the database */
-		const savedToken = await prisma.token.create({
+		const saved_token = await prisma.token.create({
 			data: {
 				accessToken: token.accessToken,
 				accessTokenExpiresAt: token.accessTokenExpiresAt,
 				refreshToken: token.accessToken, // NOTE this is only needed if you need refresh tokens down the line
 				refreshTokenExpiresAt: token.accessTokenExpiresAt,
-				scope: token.scope,
+				scope: token.scope.join(' '),
 				clientId: client.clientId,
 				userId: user.id,
 			},
 		});
 
-		return { ...savedToken, client, user };
-	},
-	getAccessToken: async (accessToken) => {
-		/* This is where you select the token from the database where the code matches */
-		if (!accessToken || accessToken === 'undefined') return false;
+		saved_token.scope = saved_token.scope.split(' ');
 
-		const foundAccessToken = await prisma.token.findFirst({
+		return { ...saved_token, client, user };
+	},
+	getAccessToken: async (token) => {
+		/* This is where you select the token from the database where the code matches */
+		if (!token || token === 'undefined') return false;
+
+		const token_data = await prisma.token.findFirst({
 			where: {
-				accessToken: accessToken,
+				accessToken: token,
 			},
 			select: {
 				accessToken: true,
@@ -56,12 +48,14 @@ module.exports = {
 			},
 		});
 
-		return foundAccessToken;
+		token_data.scope = token_data.scope.split(' ');
+
+		return token_data;
 	},
 	getRefreshToken: async (token) => {
 		/* Retrieves the token from the database */
 
-		const foundRefreshToken = await prisma.token.findFirst({
+		const token_data = await prisma.token.findFirst({
 			where: {
 				refreshToken: token,
 			},
@@ -75,7 +69,7 @@ module.exports = {
 			},
 		});
 
-		return foundRefreshToken;
+		return token_data;
 	},
 	revokeToken: async (token) => {
 		/* Delete the token from the database */
@@ -84,14 +78,12 @@ module.exports = {
 
 		return !!(await prisma.token.delete({ where: { refreshToken: token.refreshToken } }));
 	},
-	generateAuthorizationCode: (client, user, scope, callback) => {
-		/* generate authroization code */
-
-		const err = null;
+	generateAuthorizationCode: (client, user, scope) => {
+		/* Generate authroization code */
+		const input = `${client.clientId}:${user.id}:${scope.join(',')}:${Date.now()}`;
 		const seed = crypto.randomBytes(256);
-		const code = crypto.createHash('sha1').update(seed).digest('hex');
 
-		return callback(err, code);
+		return crypto.createHash('sha256').update(seed).update(input).digest('hex');
 	},
 	saveAuthorizationCode: async (code, client, user) => {
 		/* This is where you store the access code data into the database */
@@ -101,19 +93,19 @@ module.exports = {
 				authorizationCode: code.authorizationCode,
 				expiresAt: code.expiresAt,
 				redirectUri: code.redirectUri,
-				scope: code.scope,
+				scope: code.scope.join(' '),
 				clientId: client.clientId,
 				userId: user.id,
 				redirectUri: code.redirectUri,
 			},
 		});
 	},
-	getAuthorizationCode: async (authorizationCode) => {
-		/* this is where we fetch the stored data from the code */
+	getAuthorizationCode: async (code) => {
+		/* This is where we fetch the stored data from the code */
 
-		const authCode = await prisma.authCode.findFirst({
+		const code_data = await prisma.authCode.findFirst({
 			where: {
-				authorizationCode: authorizationCode,
+				authorizationCode: code,
 			},
 			select: {
 				authorizationCode: true,
@@ -125,7 +117,9 @@ module.exports = {
 			},
 		});
 
-		return authCode;
+		code_data.scope = code_data.scope.split(' ');
+
+		return code_data;
 	},
 	revokeAuthorizationCode: async (code) => {
 		/* This is where we delete codes */
@@ -133,19 +127,14 @@ module.exports = {
 		return !!(await prisma.authCode.delete({ where: { authorizationCode: code.authorizationCode } }));
 	},
 	validateScope: (user, client, scope) => {
-		return scope
-			.split(' ')
-			.filter((s) => VALID_SCOPES.indexOf(s) >= 0)
-			.join(' ');
+		/* This is where we check if this is a valid scope. */
+		return scope.filter((s) => VALID_SCOPES.indexOf(s) >= 0);
 	},
 	verifyScope: (token, scope) => {
-		/* This is where we check to make sure the client has access to this scope */
+		/* This is where we check if the client has access to this scope. */
 
 		if (!token.scope) return false;
 
-		let requestedScopes = scope.split(' ');
-		let authorizedScopes = token.scope.split(' ');
-
-		return requestedScopes.every((s) => authorizedScopes.indexOf(s) >= 0);
+		return scope.every((s) => token.scope.indexOf(s) >= 0);
 	},
 };

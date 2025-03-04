@@ -38,7 +38,7 @@ router.post(
 	oauthServer.authorize({
 		authenticateHandler: {
 			handle: (req) => {
-				return { id: req.session.user_id }; //req.body.user
+				return { id: req.session.user_id };
 			},
 		},
 	})

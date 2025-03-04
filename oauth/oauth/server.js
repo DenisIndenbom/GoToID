@@ -1,4 +1,4 @@
-const OAuthServer = require('express-oauth-server');
+const OAuthServer = require('@node-oauth/express-oauth-server');
 const model = require('./model');
 
 // Single tone method
