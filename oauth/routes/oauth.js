@@ -65,7 +65,7 @@ router.post(
 		if (grant_type === 'authorization_code') {
 			const code = req.body.code;
 
-			const authCode = await prisma.authCode.findFirst({
+			const auth_code = await prisma.authCode.findFirst({
 				where: {
 					authorizationCode: code,
 					clientId: clientId,
@@ -75,7 +75,7 @@ router.post(
 				},
 			});
 
-			if (authCode) return next();
+			if (auth_code) return next();
 		} else if (grant_type === 'refresh_token') {
 			const token = req.body.refresh_token;
 
