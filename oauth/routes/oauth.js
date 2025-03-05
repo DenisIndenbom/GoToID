@@ -1,5 +1,5 @@
 const express = require('express');
-const oauthServer = require('../oauth/server.js');
+const oauth_server = require('../oauth/server.js');
 
 const prisma = require('../../lib/prisma');
 const auth_handler = require('../../methods/is_auth.js');
@@ -35,7 +35,7 @@ router.post(
 
 		return res.redirect(`/oauth?success=false&${params}`);
 	},
-	oauthServer.authorize({
+	oauth_server.authorize({
 		authenticateHandler: {
 			handle: (req) => {
 				return { id: req.session.user_id };
@@ -94,7 +94,7 @@ router.post(
 
 		return res.status(400).send({ error: 'Bad request' });
 	},
-	oauthServer.token({
+	oauth_server.token({
 		requireClientAuthentication: {
 			// whether client needs to provide client_secret
 			authorization_code: true,
