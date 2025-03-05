@@ -3,6 +3,22 @@ const prisma = require('../../lib/prisma');
 
 const VALID_SCOPES = ['user', 'email', 'telegram', 'avatar'];
 
+/**
+ * Generate a token based on client, user and scope data using a sha256 hash
+ *
+ * @param {Object} client The client for whom the token is being generated.
+ * @param {Object} user The user for whom the token is being generated.
+ * @param {String[]} scope The scopes associated with the token
+ *
+ * @returns {String} Generated token
+ */
+async function generate_token(client, user, scope) {
+	const input = `${client.clientId}:${user.id}:${scope.join(',')}:${Date.now()}`;
+	const seed = crypto.randomBytes(256);
+
+	return crypto.createHash('sha256').update(seed).update(input).digest('hex');
+}
+
 module.exports = {
 	getClient: async (client_id, client_secret) => {
 		// Query db for details with client
@@ -17,7 +33,7 @@ module.exports = {
 			data: {
 				accessToken: token.accessToken,
 				accessTokenExpiresAt: token.accessTokenExpiresAt,
-				refreshToken: token.accessToken, // NOTE this is only needed if you need refresh tokens down the line
+				refreshToken: token.accessToken,
 				refreshTokenExpiresAt: token.accessTokenExpiresAt,
 				scope: token.scope.join(' '),
 				clientId: client.clientId,
@@ -29,6 +45,7 @@ module.exports = {
 
 		return { ...saved_token, client, user };
 	},
+	generateAccessToken: generate_token,
 	getAccessToken: async (token) => {
 		/* This is where you select the token from the database where the code matches */
 		if (!token || token === 'undefined') return false;
@@ -52,6 +69,7 @@ module.exports = {
 
 		return token_data;
 	},
+	generateRefreshToken: generate_token,
 	getRefreshToken: async (token) => {
 		/* Retrieves the token from the database */
 
@@ -78,13 +96,7 @@ module.exports = {
 
 		return !!(await prisma.token.delete({ where: { refreshToken: token.refreshToken } }));
 	},
-	generateAuthorizationCode: (client, user, scope) => {
-		/* Generate authroization code */
-		const input = `${client.clientId}:${user.id}:${scope.join(',')}:${Date.now()}`;
-		const seed = crypto.randomBytes(256);
-
-		return crypto.createHash('sha256').update(seed).update(input).digest('hex');
-	},
+	generateAuthorizationCode: generate_token,
 	saveAuthorizationCode: async (code, client, user) => {
 		/* This is where you store the access code data into the database */
 
