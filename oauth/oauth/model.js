@@ -6,8 +6,8 @@ const VALID_SCOPES = ['user', 'email', 'telegram', 'avatar'];
 /**
  * Generate a token based on client, user and scope data using a sha256 hash
  *
- * @param {Object} client The client for whom the token is being generated.
- * @param {Object} user The user for whom the token is being generated.
+ * @param {Object} client The client for whom the token is being generated
+ * @param {Object} user The user for whom the token is being generated
  * @param {String[]} scope The scopes associated with the token
  *
  * @returns {String} Generated token
@@ -25,6 +25,10 @@ module.exports = {
 
 		return await prisma.client.findFirst({
 			where: client_id ? { clientId: client_id } : { clientSecret: client_secret },
+			omit: {
+				clientSecret: true,
+				userId: true,
+			},
 		});
 	},
 	saveToken: async (token, client, user) => {
@@ -82,8 +86,17 @@ module.exports = {
 				accessTokenExpiresAt: true,
 				refreshToken: true,
 				refreshTokenExpiresAt: true,
-				client: true,
-				user: true,
+				client: {
+					omit: {
+						clientSecret: true,
+						userId: true,
+					},
+				},
+				user: {
+					select: {
+						id: true,
+					},
+				},
 			},
 		});
 
@@ -92,7 +105,7 @@ module.exports = {
 	revokeToken: async (token) => {
 		/* Delete the token from the database */
 
-		if (!token || token === 'undefined') return new Promise((resolve) => resolve(false));
+		if (!token || token === 'undefined') return false;
 
 		return !!(await prisma.token.delete({ where: { refreshToken: token.refreshToken } }));
 	},
@@ -128,6 +141,8 @@ module.exports = {
 				user: true,
 			},
 		});
+
+		if (!code_data) return null;
 
 		code_data.scope = code_data.scope.split(' ');
 
