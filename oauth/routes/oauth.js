@@ -49,26 +49,12 @@ router.post(
 	async (req, res, next) => {
 		const grant_type = req.body.grant_type;
 
-		const clientId = req.body.client_id;
-		const clientSecret = req.body.client_secret;
-
-		const client = await prisma.client.findFirst({
-			where: {
-				clientId: clientId,
-				clientSecret: clientSecret,
-			},
-		});
-
-		// Check client exists
-		if (!client) return;
-
 		if (grant_type === 'authorization_code') {
 			const code = req.body.code;
 
 			const auth_code = await prisma.authCode.findFirst({
 				where: {
 					authorizationCode: code,
-					clientId: clientId,
 					expiresAt: {
 						gte: new Date(),
 					},

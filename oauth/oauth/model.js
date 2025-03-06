@@ -137,8 +137,17 @@ module.exports = {
 				expiresAt: true,
 				scope: true,
 				clientId: true,
-				client: true,
-				user: true,
+				client: {
+					omit: {
+						clientSecret: true,
+						userId: true,
+					},
+				},
+				user: {
+					select: {
+						id: true,
+					},
+				},
 			},
 		});
 

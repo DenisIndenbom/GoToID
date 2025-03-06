@@ -63,7 +63,7 @@ router.get('/email', oauth.authenticate({ scope: 'email' }), async (req, res) =>
 router.get('/telegram', oauth.authenticate({ scope: 'telegram' }), async (req, res) => {
 	let accessToken = get_token(req);
 
-	const telegram = (
+	const profile = (
 		await prisma.token.findFirst({
 			where: {
 				accessToken: accessToken,
@@ -80,9 +80,9 @@ router.get('/telegram', oauth.authenticate({ scope: 'telegram' }), async (req, r
 				},
 			},
 		})
-	).user.Profile.telegram;
+	).user.Profile;
 
-	return res.status(200).json({ telegram: telegram });
+	return res.status(200).json({ telegram: profile ? profile.telegram : '' });
 });
 
 router.get('/avatar', oauth.authenticate({ scope: 'avatar' }), async (req, res) => {
