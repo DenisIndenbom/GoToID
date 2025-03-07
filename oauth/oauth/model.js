@@ -23,7 +23,12 @@ module.exports = {
 		// Query db for details with client
 
 		return await prisma.client.findFirst({
-			where: client_id ? { clientId: client_id } : { clientSecret: client_secret },
+			where:
+				client_id && client_secret
+					? { clientId: client_id, clientSecret: client_secret }
+					: client_id
+					? { clientId: client_id }
+					: { clientSecret: client_secret },
 			omit: {
 				clientSecret: true,
 				userId: true,
