@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const token = require('../../methods').token;
 const prisma = require('../../lib/prisma');
 
 const VALID_SCOPES = ['user', 'email', 'telegram', 'avatar'];
@@ -14,9 +14,8 @@ const VALID_SCOPES = ['user', 'email', 'telegram', 'avatar'];
  */
 async function generate_token(client, user, scope) {
 	const input = `${client.clientId}:${user.id}:${scope.join(',')}:${Date.now()}`;
-	const seed = crypto.randomBytes(256);
 
-	return crypto.createHash('sha256').update(seed).update(input).digest('hex');
+	return token.generate(input);
 }
 
 module.exports = {
